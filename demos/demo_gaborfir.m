@@ -1,6 +1,6 @@
-%DEMO_FIR
+%DEMO_GABORFIR
 %
-%   This demo demonstrates how to work with FIR windows.
+%   This demo demonstrates how to work with FIR windows in Gabor systems.
 %
 %   FIR windows are the windows traditionally used in signal processing.
 %   They are short, much shorter than the signal, and this is used to 
@@ -14,7 +14,7 @@
 %
 %   This demo demonstrates two methods:
 %
-%     1) Using a Gabor frame with a simple structure, for which tight
+%     1) Using a Gabor frame with a simple structure, for which dual/tight
 %        FIR windows are easy to construct. This is a very common
 %        technique in traditional signal processing, but it limits the
 %        choice of windows and lattice parameters.
@@ -84,7 +84,7 @@ title('SQRT Hanning window FIR window.');
 % Plot the magnitude response of the window (the frequency representation of
 % the window on a Db scale).
 subplot(2,1,2);
-magresp(g,LLong);
+magresp(g,'L',LLong);
 title('Magnitude response of SQRT Hanning window.');
 
 % -------- second part: True, short FIR window -------------------------
@@ -114,7 +114,7 @@ title('Kaiser window.');
 % Plot the magnitude response of the window (the frequency representation of
 % the window on a Db scale).
 subplot(2,2,2);
-magresp(g,LLong);
+magresp(g,'L',LLong);
 title('Magnitude response of Kaiser window.');
 
 % Plot the window in the time-domain.
@@ -126,7 +126,7 @@ title('Dual of Kaiser window.');
 % Plot the magnitude response of the window (the frequency representation of
 % the window on a Db scale).
 subplot(2,2,4);
-magresp(gd,LLong);
+magresp(gd,'L',LLong);
 title('Magnitude response of dual Kaiser window.');
 
 
@@ -151,7 +151,7 @@ gfir=long2fir(glong,2*M,'wp');
 gfirextend=fir2long(gfir,LLong);
 gd_long=gabdual(gfirextend,a,M);
 
-% Cut it, preserving the WPE symmetri
+% Cut it, preserving the WPE symmetry
 gd_fir=long2fir(gd_long,6*M,'wp');
 
 % Compute the reconstruction error
@@ -174,7 +174,7 @@ title('Gaussian FIR window.');
 % Plot the magnitude response of the window (the frequency representation of
 % the window on a Db scale).
 subplot(2,2,2);
-magresp(gfir,LLong);
+magresp(gfir,'L',LLong);
 title('Magnitude response of FIR Gaussian.')
 
 % Plot the window in the time-domain.
@@ -186,7 +186,7 @@ title('Dual of Gaussian FIR window.');
 % Plot the magnitude response of the window (the frequency representation of
 % the window on a Db scale).
 subplot(2,2,4);
-magresp(gd_fir,LLong);
+magresp(gd_fir,'L',LLong);
 title('Magnitude response.');
 
 % ----- Fourth part, cutting a tight LONG window --------------
@@ -219,5 +219,5 @@ title('Almost tight FIR window.');
 % Plot the magnitude response of the window (the frequency representation of
 % the window on a Db scale).
 subplot(2,1,2);
-magresp(gt_fir,LLong);
+magresp(gt_fir,'L',LLong);
 title('Magnitude response.');
