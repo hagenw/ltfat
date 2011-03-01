@@ -1,4 +1,4 @@
-function y = dfft(f,alpha,p)
+function y = dfft(f,alpha,varargin)
 %DFFT  Discrete fractional Fourier transform
 %   Usage: y=dfft(f,a,p);
 % 
@@ -8,22 +8,38 @@ function y = dfft(f,alpha,p)
 %   The code for this file was originally published on
 %   http://nalag.cs.kuleuven.be/research/software/FRFT/
 %
+%R   bultheel2004computation  
   
+%   AUTHOR : A. Bultheel
+%   TESTING: TEST_DFFT
+%   REFERENCE: OK
+  
+if nargin<2
+  error('%s: Too few input parameters.',upper(mfilename));
+end;
+
 N = length(f);
+
+definput.keyvals.p=round(N/2);
+definput.flags.center={'start','middle'};
+[flags,kv]=ltfatarghelper({},definput,varargin);
+
+  
 
 even = ~rem(N,2);
 
 f = f(:);
 
-if (nargin == 2)
-  p = round(N/2);
+if flags.do_middle
+  f=fftshift(f);
 end;
 
-p = min(max(2,p),N-1);
-
 % Get the eigenvectors and eigenvalues
-E = hermbasis2(N,p);
+E = hermbasis(N,kv.p);
 V = exp(-j*pi/2*alpha*([0:N-2 N-1+even])).';
 
 y = E*(V .*(E'*f));
 
+if flags.do_middle
+  y=ifftshift(y);
+end;

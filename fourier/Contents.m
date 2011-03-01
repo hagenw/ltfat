@@ -18,6 +18,10 @@
 %    ISEVEN         -  Test if function is even.
 %    MIDDLEPAD      -  Cut or extend even function.
 %
+%  Rotation in the TF-plane
+%    HERMBASIS      -  Orthonormal basis of Hermite functions.
+%    DFFT           -  The Discrete Fractional Fourier Transform.
+%
 %  Functions
 %    EXPWAVE        -  Complex exponential wave.
 %    PCHIRP         -  Periodic chirp.
@@ -25,7 +29,6 @@
 %    PHEAVISIDE     -  Periodic Heaviside function.
 %    PRECT          -  Periodic rectangle function.
 %    PSINC          -  Periodic sinc function.
-%    HERMBASIS      -  Orthonormal basis of Hermite functions.
 %
 %  Window functions
 %    PGAUSS         -  Periodic Gaussian.

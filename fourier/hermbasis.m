@@ -1,4 +1,4 @@
-function [V]=hermbasis(L,p)
+function [E,lambda]=hermbasis(L,p)
 %HERMBASIS  Orthonormal basis of discrete Hermite functions.
 %   Usage:  V=hermbasis(L,p);
 %
@@ -13,13 +13,16 @@ function [V]=hermbasis(L,p)
 %   HERMBASIS(L,p) will do the same for an approximation order of p. p
 %   must be between 2 and 2*L. Default value is L/2.
 %
+%   [V,lambda]=HERMBASIS(...) additionally returns the eigenvalues of the DFT.
+%
 %   The code for this file was originally published on
 %   http://nalag.cs.kuleuven.be/research/software/FRFT/
 %
 %   See also:  dft, pherm
 %
+%R  bultheel2004computation
 
-%   AUTHOR : 
+%   AUTHOR : A. Bultheel
 %   TESTING: TEST_HERMBASIS
 %   REFERENCE: OK
 
@@ -28,11 +31,11 @@ if nargin<2
 end;
 
 if p<2  
-  error('p must be greater than or equal to 2.');
+  error('p must be greater than 1.');
 end;
 
-if p>=2*L
-  error('p must be less than 2*L.');
+if p>L
+  error('p must be less than L.');
 end;
   
 
@@ -95,6 +98,12 @@ else
   ind(L+1) = [];
 end
 E = E(:,ind');
+
+if nargout==2
+  
+  lambda = exp(j*pi/2*([0:L-2 L-1+even])).';
+
+end;
 
 if 0
   % This is the old method from %R  ozzaku01.
