@@ -101,7 +101,7 @@ E = E(:,ind');
 
 if nargout==2
   
-  lambda = exp(j*pi/2*([0:L-2 L-1+even])).';
+  lambda = exp(-j*pi/2*([0:L-2 L-1+even])).';
 
 end;
 

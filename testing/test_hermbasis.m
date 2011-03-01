@@ -25,8 +25,8 @@ for ii=1:length(Lr)
     s=sprintf('HERMBASIS orth L:%3i p:%3i %0.5g %s',L,p,res,fail);
     disp(s);
     
-    % test Fourier invariance
-    res=norm(H-dft(H)*diag(lambda),'fro');
+    % test eigendecomposition
+    res=norm(dft(H)-H*diag(lambda),'fro');
     [test_failed,fail]=ltfatdiditfail(res,test_failed);
     
     s=sprintf('HERMBASIS four L:%3i p:%3i %0.5g %s',L,p,res,fail);

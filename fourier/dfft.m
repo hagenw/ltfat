@@ -35,10 +35,11 @@ if flags.do_middle
 end;
 
 % Get the eigenvectors and eigenvalues
-E = hermbasis(N,kv.p);
+[E,lambda] = hermbasis(N,kv.p);
 V = exp(-j*pi/2*alpha*([0:N-2 N-1+even])).';
 
 y = E*(V .*(E'*f));
+%y = E*((lambda.^alpha) .*(E'*f));
 
 if flags.do_middle
   y=ifftshift(y);
