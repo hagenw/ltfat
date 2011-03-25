@@ -8,7 +8,7 @@ set(FILES ltfat   dgt.c dgt_fac.c dgt_fb.c dgtreal_fac.c
                   iwfac.c ltfat_blaslapack.c reassign.c spread.c tfutil.c wfac.c
                   windows.c winmanip.c)
 
-add_library (ltfat-nomem ${FILES} ) 
+add_library (ltfat-nomem SHARED ${FILES} ) 
 add_library (ltfat ${FILES} c-safe-memalloc.c) 
 
 target_link_libraries(ltfat ${CMAKE_REQUIRED_LIBRARIES})
