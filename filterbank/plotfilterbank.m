@@ -38,7 +38,7 @@ function [] = plotfilterbank(coef,a,varargin)
 %-     'tick',t     - Array of tick positions on the y-axis. Use this
 %                   option to specify the tick position manually.
 %
-%-     'audtick'   - Use ticks suitable for visualizing and auditory
+%-     'audtick'   - Use ticks suitable for visualizing an auditory
 %                    filterbank. Same as tick,[0,50,100,250,500,1000,...].
 %
 %   See also:  filterbank, ufilterbank, tfplot, sgram
@@ -80,7 +80,18 @@ end;
 if flags.do_linsq
   coef=abs(coef).^2;
 end;
-  
+
+if flags.do_linabs
+  coef=abs(coef);
+end;
+
+if flags.do_lin
+  if ~isreal(coef)
+    error(['Complex valued input cannot be plotted using the "lin" flag.',...
+           'Please use the "linsq" or "linabs" flag.']);
+  end;
+end;
+
 % 'dynrange' parameter is handled by thresholding the coefficients.
 if ~isempty(kv.dynrange)
   maxclim=max(coef(:));
@@ -135,27 +146,34 @@ else
     set(gca,'YTickLabel',num2str(tick(:),3));
 
   else
+    nlarge=1000;
     tick=kv.tick;
-    
-    % Keep only ticks less than highest frequency
-    tick=tick(tick<kv.fc(M));
-    
+        
     % Create a crude inverse mapping to determine the positions of the
-    % ticks
-    manyticks=spline(1:M,kv.fc,linspace(1,M,1000));
+    % ticks. Include half a channel in each direction, because it is
+    % possible to display a tick mark all the way to the edge of the
+    % plot.
+    manyticks=spline(1:M,kv.fc,linspace(0.5,M+0.5,nlarge));
+    
+    % Keep only ticks <= than highest frequency+.5*bandwidth
+    tick=tick(tick<=manyticks(end));
+    
+    % Keep only ticks >= lowest frequency-.5*bandwidth
+    tick=tick(tick>=manyticks(1));    
+    
     nticks=length(tick);
     tickpos=zeros(nticks,1);
     for ii=1:nticks
       jj=find(manyticks>=tick(ii));
-      tickpos(ii)=jj(1)/1000*M;
+      tickpos(ii)=jj(1)/nlarge*M;
     end;
-    
+
     set(gca,'YTick',tickpos);
     set(gca,'YTickLabel',num2str(tick(:)));
 
   end;
   
-  ylabel(sprintf('%s (s)',kv.frequency));
+  ylabel(sprintf('%s (Hz)',kv.frequency));
 
 
   
