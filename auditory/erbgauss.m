@@ -1,8 +1,8 @@
-function g=erbgauss(M,fs,varargin);
-%AUDGAUSS  Gammatone filter coefficients
-%   Usage: g = audgauss(fc,fs,n,bw);
-%          g = audgauss(fc,fs,n);
-%          g = audgauss(fc,fs);
+function [g,fc]=erbgauss(M,fs,varargin);
+%ERBGAUSS  Gammatone filter coefficients
+%   Usage: g = erbgauss(fc,fs,n,bw);
+%          g = erbgauss(fc,fs,n);
+%          g = erbgauss(fc,fs);
 %
 %   Input parameters:
 %      M     -  Number of channels
@@ -13,17 +13,17 @@ function g=erbgauss(M,fs,varargin);
 %   Output parameters:
 %      g     -  FIR filters as columns
 %
-%   AUDGAUSS(M,fs,n,bw) computes Gaussian filters placed on the
+%   ERBGAUSS(M,fs,n,bw) computes Gaussian filters placed on the
 %   Erb-scale. M filters is computed with center frequencies
 %   equidistantly spaced on the Erb-scale, lowest and highest center
 %   frequencies are 0 and the Nyquest frequency. The bandwidth of each
 %   filter measured in Erbs is determined by bw, and the length of each
 %   filter in time (measured in samples) is given by n.
 %
-%   AUDGAUSS(fc,fs,n) will do the same but choose a filter bandwidth
+%   ERBGAUSS(fc,fs,n) will do the same but choose a filter bandwidth
 %   based on the number of channels.
 %
-%   AUDGAUSS(fc,fs) will do as above and choose a sufficiently long
+%   ERBGAUSS(fc,fs) will do as above and choose a sufficiently long
 %   filter to accurately represent the lowest subband channel.
 %
 %   See also: erbspace, audspace, audfiltbw
@@ -67,7 +67,7 @@ g={};
 
 % Compute the values in Erb of the channel frequencies of an FFT of
 % length n.
-audpoints   = freqtoerb(halfmod(fs*(0:n-1)/n,fs)).';
+audpoints   = freqtoerb(modcent(fs*(0:n-1)/n,fs)).';
 
 % This one is necessary to represent the highest frequency filters, which
 % overlap into the negative frequencies.
@@ -89,3 +89,5 @@ for m = 0:M-1
   g{m+1}=normalize(gf,'1');  
   
 end;
+
+fc=erbspace(0,fs/2,M);
