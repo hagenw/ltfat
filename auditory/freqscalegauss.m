@@ -1,11 +1,11 @@
-function [g,fc]=erbgauss(M,fs,varargin);
-%ERBGAUSS  Gammatone filter coefficients
-%   Usage: g = erbgauss(fc,fs,n,bw);
-%          g = erbgauss(fc,fs,n);
-%          g = erbgauss(fc,fs);
+function [g]=freqscalegauss(fc,fs,varargin);
+%FREQSCALEGAUSS  Gaussian function on a frequency scale
+%   Usage: g = freqscalegauss(fc,fs,n,bw);
+%          g = freqscalegauss(fc,fs,n);
+%          g = freqscalegauss(fc,fs);
 %
 %   Input parameters:
-%      M     -  Number of channels
+%      fc    -  Centre frequencies
 %      fs    -  sampling rate in Hz.
 %      n     -  filter order.
 %      bw    -  bandwidth of the filters in Erb.
@@ -13,17 +13,15 @@ function [g,fc]=erbgauss(M,fs,varargin);
 %   Output parameters:
 %      g     -  FIR filters as columns
 %
-%   ERBGAUSS(M,fs,n,bw) computes Gaussian filters placed on the
-%   Erb-scale. M filters is computed with center frequencies
-%   equidistantly spaced on the Erb-scale, lowest and highest center
-%   frequencies are 0 and the Nyquest frequency. The bandwidth of each
-%   filter measured in Erbs is determined by bw, and the length of each
+%   FREQSCALEGAUSS(fc,fs,n,bw) computes filters with have a Gaussian shape on a frequency scale.
+%   The default is to use the Erb-scale. The bandwidth of each filter is given by bw units on  
+%   the corresponding scale, and the length of each
 %   filter in time (measured in samples) is given by n.
 %
-%   ERBGAUSS(fc,fs,n) will do the same but choose a filter bandwidth
-%   based on the number of channels.
+%   FREQSCALEGAUSS(fc,fs,n) will do the same but choose a filter bandwidth of 1 on the frequency
+%   scale.
 %
-%   ERBGAUSS(fc,fs) will do as above and choose a sufficiently long
+%   FREQSCALEGAUSS(fc,fs) will do as above and choose a sufficiently long
 %   filter to accurately represent the lowest subband channel.
 %
 %   See also: erbspace, audspace, audfiltbw
@@ -50,12 +48,11 @@ definput.importdefaults={'null'};
 definput.flags.real={'complex','real'};
 definput.keyvals.n=[];
 
-definput.keyvals.bw=freqtoerb(fs/2)/(M-1);
+definput.keyvals.bw=1;
 
 [flags,keyvals,n,bw]  = ltfatarghelper({'n','bw'},definput,varargin);
 
-
-% ourbeta is used in order not to mask the beta function.
+M=length(fc);
 
 if isempty(n)
   % Calculate a good value for n
@@ -73,21 +70,15 @@ audpoints   = freqtoerb(modcent(fs*(0:n-1)/n,fs)).';
 % overlap into the negative frequencies.
 audpoints_p = 2*freqtoerb(fs/2)+audpoints;
 
-if M==1
-  delta_ch=0;
-else
-  delta_ch=freqtoerb(fs/2)/(M-1);
-end;
+fc_scale = freqtoerb(fc);
 
-for m = 0:M-1
-   
-  gf=exp(-pi*(audpoints-delta_ch*m).^2/bw)+exp(-pi*(audpoints_p-delta_ch*m).^2/bw);
+for m = 1:M
+  gf = exp(-pi*(audpoints-fc_scale(m)).^2/bw) ...
+      +exp(-pi*(audpoints_p-fc_scale(m)).^2/bw);
 
   % Convert back to time-domain
   gf=ifft(gf);    
 
-  g{m+1}=normalize(gf,'1');  
+  g{m}=normalize(gf,'1');  
   
 end;
-
-fc=erbspace(0,fs/2,M);

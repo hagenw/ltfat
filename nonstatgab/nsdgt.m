@@ -89,7 +89,7 @@ function [c,Ls] = nsdgt(f,g,a,M)
 % todo: 
 % - It would be good to check the validity of the inputs. Some things to
 %   check: g,a,M must have the same length, each cell of g must be a
-%   vector, values of a and M must be intergers,...
+%   vector, values of a and M must be integers,...
 
 
 timepos=cumsum(a)-a(1);

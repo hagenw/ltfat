@@ -50,3 +50,18 @@ res=norm(f-rt);
 
 [test_failed,fail]=ltfatdiditfail(res,test_failed);
 fprintf(['NSDGT TIGHT %0.5g %s\n'],res,fail);
+
+% ----- iterativ inversion -----
+
+gbig=cell(3,1);
+for ii=1:3
+  gbig{ii}=randn(2*M(ii),1);
+end;
+
+cbig=nsdgt(f,gbig,a,M);
+r=insdgtiter(cbig,gbig,a,'rand');
+
+res=norm(f-r);
+
+[test_failed,fail]=ltfatdiditfail(res,test_failed);
+fprintf(['NSDGT ITER  %0.5g %s\n'],res,fail);
