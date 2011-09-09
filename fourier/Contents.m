@@ -40,7 +40,7 @@
 %    LONG2FIR       -  Cut LONG window to FIR window.
 %    MAGRESP        -  Magnitude response plot.
 %
-%  Approximation of continous functions
+%  Approximation of continuous functions
 %    FFTRESAMPLE    -  Fourier interpolation.
 %    DCTRESAMPLE    -  Cosine interpolation.
 %    PDERIV         -  Derivative of periodic function.
