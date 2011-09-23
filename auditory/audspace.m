@@ -46,9 +46,9 @@ definput.import={'freqtoaud'};
 
 %% ------ Computation --------------------------
 
-audlimits = freqtoaud([flow,fhigh],flags.audscale);
+audlimits = freqtoaud([flow,fhigh],'argimport',flags,kv);
 
-y = audtofreq(linspace(audlimits(1),audlimits(2),n),flags.audscale);
+y = audtofreq(linspace(audlimits(1),audlimits(2),n),'argimport',flags,kv);
 
 bw=(audlimits(2)-audlimits(1))/(n-1);
 

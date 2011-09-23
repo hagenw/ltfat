@@ -33,6 +33,8 @@ function aud = freqtoaud(freq,varargin);
 %
 %-    'freq'  - Return the frequency in Hz. 
 %
+%-    'log10' - Return log10 of the frequency.
+%
 %   If no flag is given, the erb-scale will be selected.
 %
 %   See also: freqtoaud, audspace, audfiltbw
@@ -91,4 +93,19 @@ end;
 
 if flags.do_freq
   aud = freq;
+end;
+
+if flags.do_log10
+  if isempty(kv.flow)
+    error(['%s: When using the log10 scale, you must enter a value for the ' ...
+           '"flow" parameter.'],upper(mfilename));
+  end;
+  make_it_pos=log10(kv.flow);
+  mask=abs(freq)>kv.flow;
+  
+  % Do the linear part.
+  aud = freq/kv.flow*abs(make_it_pos);  
+  
+  % Do the logarithmic part
+  aud(mask) = sign(freq(mask)).*(log10(abs(freq(mask))-make_it_pos));
 end;

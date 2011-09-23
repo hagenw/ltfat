@@ -8,18 +8,19 @@ function [g]=freqscalegauss(fc,fs,varargin);
 %      fc    -  Centre frequencies
 %      fs    -  sampling rate in Hz.
 %      n     -  filter order.
-%      bw    -  bandwidth of the filters in Erb.
+%      bw    -  bandwidth of the filters.
 %
 %   Output parameters:
 %      g     -  FIR filters as columns
 %
-%   FREQSCALEGAUSS(fc,fs,n,bw) computes filters with have a Gaussian shape on a frequency scale.
-%   The default is to use the Erb-scale. The bandwidth of each filter is given by bw units on  
-%   the corresponding scale, and the length of each
-%   filter in time (measured in samples) is given by n.
+%   FREQSCALEGAUSS(fc,fs,n,bw) computes filters with have a Gaussian shape
+%   on a frequency scale.  The default is to use the Erb-scale. The
+%   bandwidth of each filter is given by bw units on the corresponding
+%   scale, and the length of each filter in time (measured in samples) is
+%   given by n.
 %
-%   FREQSCALEGAUSS(fc,fs,n) will do the same but choose a filter bandwidth of 1 on the frequency
-%   scale.
+%   FREQSCALEGAUSS(fc,fs,n) will do the same but choose a filter bandwidth
+%   of 1 on the frequency scale.
 %
 %   FREQSCALEGAUSS(fc,fs) will do as above and choose a sufficiently long
 %   filter to accurately represent the lowest subband channel.
@@ -43,12 +44,12 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 
-definput.import={'normalize'};
+definput.import={'normalize','freqtoaud'};
 definput.importdefaults={'null'};
 definput.flags.real={'complex','real'};
 definput.keyvals.n=[];
 
-definput.keyvals.bw=1;
+definput.keyvals.bw=[];
 
 [flags,keyvals,n,bw]  = ltfatarghelper({'n','bw'},definput,varargin);
 
@@ -60,17 +61,23 @@ if isempty(n)
   n=5000;
 end;
 
+if isempty(bw)
+  min_max = freqtoaud([min(fc),max(fc)],flags.audscale);
+  bw=(min_max(2)-min_max(1))/(M-1);
+end;
+bw
+min_max
 g={};
 
-% Compute the values in Erb of the channel frequencies of an FFT of
+% Compute the values in Aud of the channel frequencies of an FFT of
 % length n.
-audpoints   = freqtoerb(modcent(fs*(0:n-1)/n,fs)).';
+audpoints   = freqtoaud(modcent(fs*(0:n-1)/n,fs),'argimport',flags,kv).';
 
 % This one is necessary to represent the highest frequency filters, which
 % overlap into the negative frequencies.
-audpoints_p = 2*freqtoerb(fs/2)+audpoints;
+audpoints_p = 2*freqtoaud(fs/2,'argimport',flags,kv)+audpoints;
 
-fc_scale = freqtoerb(fc);
+fc_scale = freqtoaud(fc,'argimport',flags,kv);
 
 for m = 1:M
   gf = exp(-pi*(audpoints-fc_scale(m)).^2/bw) ...
