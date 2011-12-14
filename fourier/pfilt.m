@@ -1,4 +1,4 @@
-function h=pfilt(f,g,a,dim)
+function h=pfilt(f,g,varargin)
 %PFILT  Apply filter with periodic boundary conditions
 %   Usage:  h=pfilt(f,g);
 %           h=pfilt(f,g,a,dim);
@@ -12,17 +12,16 @@ function h=pfilt(f,g,a,dim)
 %   PFILT(f,g,a,dim) filters along dimension dim.
 %
 %   See also: pconv
+
   
 % Assert correct input.
-error(nargchk(2,4,nargin));
-
-if nargin<4
-  dim=1;
+if nargin<2
+  error('%s: Too few input parameters.',upper(mfilename));
 end;
 
-if nargin<3
-  a=1;
-end;
+definput.keyvals.a=1;
+definput.keyvals.dim=[];
+[flags,kv,a,dim]=ltfatarghelper({'a','dim'},definput,varargin);
 
 L=[];
 
@@ -31,7 +30,14 @@ L=[];
 [g,info] = comp_fourierwindow(g,L,'PFILT');
 
 h=squeeze(comp_ufilterbank_fft(f,g,a));
-  
+
+% FIXME: This check should be removed when comp_ufilterbank_fft{.c/.cc}
+% have been fixed.
+if isreal(f) && isreal(g)
+  h=real(h);
+end;
+
 permutedsize(1)=size(h,1);
   
 h=assert_sigreshape_post(h,dim,permutedsize,order);
+

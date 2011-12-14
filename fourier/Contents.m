@@ -10,6 +10,8 @@
 %    FFTINDEX       -  Index of positive and negative frequencies.
 %    NEXTFASTFFT    -  Next efficient FFT size.
 %    MODCENT        -  Centered modulo operation.
+%    PLOTFFT        -  Plot FFT coefficients.
+%    PLOTFFTREAL    -  Plot FFTREAL coefficients.
 %
 %  Simple operations on periodic functions
 %    INVOLUTE       -  Involution.
@@ -17,7 +19,7 @@
 %    PODD           -  Odd part of periodic function.
 %    PCONV          -  Periodic convolution.
 %    PFILT          -  Apply filter with periodic boundary conditions.
-%    ISEVEN         -  Test if function is even.
+%    ISEVENFUNCTION -  Test if function is even.
 %    MIDDLEPAD      -  Cut or extend even function.
 %
 %  Functions
