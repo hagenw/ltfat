@@ -1,7 +1,8 @@
 # Use GNU Make to process this file
 #CC = i686-pc-mingw32-gcc 
-CC = gcc
-
+#CC = gcc
+CC = x86_64-w64-mingw32-gcc
+LD = x86_64-w64-mingw32-ld
 
 CFLAGS=-O2 -Wall -fPIC -std=c99 -I../thirdparty -L../thirdparty
 
@@ -29,7 +30,7 @@ files_matlab = $(files) $(files_blaslapack) dltfat_blaslapack_matlab.o sltfat_bl
 all: libltfat.a unixnomem
 
 win_ms: $(files) c-safe-memalloc.o
-	gcc -shared -o ltfat.dll -Wl,--output-def,ltfat.def,--out-implib,libltfat_dll.a \
+	$(CC) -shared -o ltfat.dll -Wl,--output-def,ltfat.def,--out-implib,libltfat_dll.a \
 		-L../thirdparty -lfftw3-3 -lfftw3f-3 $(files) c-safe-memalloc.o
 	cp -f ltfat.dll ../mex/
 	cp -f ltfat.def ../mex/

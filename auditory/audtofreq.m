@@ -54,15 +54,15 @@ if flags.do_freq
 end;
 
 if flags.do_log10
-  if isempty(kv.flow)
+  if isempty(kv.fcorner)
     error(['%s: When using the log10 scale, you must enter a value for the ' ...
-           '"flow" parameter.'],upper(mfilename));
+           '"fcorner" parameter.'],upper(mfilename));
   end;
 
-  make_it_pos=log10(kv.flow);
+  make_it_pos=log10(kv.fcorner);
   mask=abs(aud)>abs(make_it_pos);
   
   % Do the linear part
-  freq=aud/abs(make_it_pos)*kv.flow;
+  freq=aud/abs(make_it_pos)*kv.fcorner;
   freq(mask)=sign(aud(mask)).*10.^(abs(aud(mask))+make_it_pos);
 end;

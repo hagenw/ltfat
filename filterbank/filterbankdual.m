@@ -61,8 +61,8 @@ if all(a==a(1))
   end;
   
 else
-  
-  error('Not implemented yet.');
+
+  error('Please use IFILTERBANKITER to invert a non-uniform filterbank.');
   
 end;
 

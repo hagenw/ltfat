@@ -1,8 +1,8 @@
-function [g]=freqscalegauss(fc,fs,varargin);
-%FREQSCALEGAUSS  Gaussian function on a frequency scale
-%   Usage: g = freqscalegauss(fc,fs,n,bw);
-%          g = freqscalegauss(fc,fs,n);
-%          g = freqscalegauss(fc,fs);
+function [g]=linloggauss(fc,fs,C1,C2,varargin);
+%LINLOGGAUSS  Gaussian function on a linlog scale
+%   Usage: g = linloggauss(fc,fs,n,bw);
+%          g = linloggauss(fc,fs,n);
+%          g = linloggauss(fc,fs);
 %
 %   Input parameters:
 %      fc    -  Centre frequencies
@@ -13,16 +13,16 @@ function [g]=freqscalegauss(fc,fs,varargin);
 %   Output parameters:
 %      g     -  FIR filters as columns
 %
-%   FREQSCALEGAUSS(fc,fs,n,bw) computes filters with have a Gaussian shape
+%   LINLOGGAUSS(fc,fs,n,bw) computes filters with have a Gaussian shape
 %   on a frequency scale.  The default is to use the Erb-scale. The
 %   bandwidth of each filter is given by bw units on the corresponding
 %   scale, and the length of each filter in time (measured in samples) is
 %   given by n.
 %
-%   FREQSCALEGAUSS(fc,fs,n) will do the same but choose a filter bandwidth
+%   LINLOGGAUSS(fc,fs,n) will do the same but choose a filter bandwidth
 %   of 1 on the frequency scale.
 %
-%   FREQSCALEGAUSS(fc,fs) will do as above and choose a sufficiently long
+%   LINLOGGAUSS(fc,fs) will do as above and choose a sufficiently long
 %   filter to accurately represent the lowest subband channel.
 %
 %   See also: erbspace, audspace, audfiltbw
@@ -44,11 +44,12 @@ if ~isnumeric(fs) || ~isscalar(fs) || fs<=0
 end;
 
 
-definput.import={'normalize','freqtoaud'};
+definput.import={'normalize'};
 definput.importdefaults={'null'};
 definput.flags.real={'complex','real'};
-definput.keyvals.flow=[];
 definput.keyvals.n=[];
+definput.keyvals.corner=[];
+definput.flags.cornertype={'soft','hard'};
 
 definput.keyvals.bw=[];
 
@@ -63,7 +64,7 @@ if isempty(n)
 end;
 
 if isempty(bw)
-  min_max = freqtoaud([min(fc),max(fc)],flags.audscale);
+  min_max = linlog([min(fc),max(fc)],C1,'argimport',flags,kv);
   bw=(min_max(2)-min_max(1))/(M-1);
 end;
 
@@ -71,13 +72,13 @@ g={};
 
 % Compute the values in Aud of the channel frequencies of an FFT of
 % length n.
-audpoints   = freqtoaud(modcent(fs*(0:n-1)/n,fs),'argimport',flags,kv).';
+audpoints   = linlog(modcent(fs*(0:n-1)/n,fs),C1,'argimport',flags,kv).';
 
 % This one is necessary to represent the highest frequency filters, which
 % overlap into the negative frequencies.
-audpoints_p = 2*freqtoaud(fs/2,'argimport',flags,kv)+audpoints;
+audpoints_p = 2*linlog(fs/2,C1,'argimport',flags,kv)+audpoints;
 
-fc_scale = freqtoaud(fc,'argimport',flags,kv);
+fc_scale = linlog(fc,C1,'argimport',flags,kv);
 
 for m = 1:M
   gf = exp(-pi*(audpoints-fc_scale(m)).^2/bw) ...

@@ -50,11 +50,11 @@ if nargin==1
 end;
 
 if size(L,1)>1 || size(L,2)>1
-  error('L must be a scalar');
+  error('%s: L must be a scalar',upper(mfilename));
 end;
 
 if rem(L,1)~=0
-  error('L must be an integer.')
+  error('%s: L must be an integer',upper(mfilename));    
 end;
 
 switch(nargin)

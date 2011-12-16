@@ -36,6 +36,7 @@ function [a,M,longestfilter,lcm_a]=assert_filterbankinput(g,a,mustbeuniform);
         error(['%s: The number of entries in "a" must match the number of ' ...
                'filters.'],upper(callfun));
       end;
+      
     else
       a=a*ones(M,1);
     end;

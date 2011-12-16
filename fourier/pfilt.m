@@ -27,12 +27,16 @@ L=[];
 
 [f,L,Ls,W,dim,permutedsize,order]=assert_sigreshape_pre(f,L,dim,'PFILT');
 
+if rem(L,a)>0
+  error('%s: The downsampling rate "a" must divide the length of the signal.',upper(mfilename));
+end;
+
 [g,info] = comp_fourierwindow(g,L,'PFILT');
 
 h=squeeze(comp_ufilterbank_fft(f,g,a));
 
 % FIXME: This check should be removed when comp_ufilterbank_fft{.c/.cc}
-% have been fixed.
+% has been fixed.
 if isreal(f) && isreal(g)
   h=real(h);
 end;

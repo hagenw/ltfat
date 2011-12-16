@@ -83,7 +83,7 @@ if nargin<1
 end;
 
 if (prod(size(L,1))~=1 || ~isnumeric(L))
-  error('L must be a scalar');
+  error('%s: L must be a scalar',upper(mfilename));
 end;
 
 if rem(L,1)~=0

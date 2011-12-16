@@ -32,7 +32,7 @@ if nargin<2
 end;
 
 if  (numel(L)~=1 || ~isnumeric(L))
-  error('L must be a scalar');
+  error('%s: L must be a scalar',upper(mfilename));
 end;
 
 if rem(L,1)~=0

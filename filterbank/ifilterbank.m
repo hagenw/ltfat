@@ -24,7 +24,7 @@ end;
 definput.keyvals.Ls=[];
 [flags,kv,Ls]=ltfatarghelper({'Ls'},definput,varargin);
 
-[a,M,longestfilter,lcm_a]=assert_filterbankinput(g,a,1);
+[a,M,longestfilter,lcm_a]=assert_filterbankinput(g,a,0);
 
 if iscell(c)
   Mcoef=numel(c);
@@ -32,21 +32,51 @@ else
   Mcoef=size(c,2);
 end;
 
-if ~(size(c,2)==Mcoef)
-  error(['Mismatch between the size of the input coefficients and the ' ...
-         'number of filters.']);
+if iscell(g)
+  M=numel(g);
+else
+  M=size(g,2);
 end;
 
-if iscell(c)
-  error('Not implemented yet.');
+if ~(M==Mcoef)
+    error(['Mismatch between the size of the input coefficients and the ' ...
+           'number of filters.']);
+end;
+
+if std(a)>0
+  % We just use the first channel to determine the correct L, as it must
+  % fit for all channels.
+
+  W=size(c{1},2);
+  
+  for m=1:M
+    N=size(c{m},1);
+    L=N*a(m);
+    
+    G=conj(fft(fir2long(g{m},L)));
+    
+    f=zeros(L,W);
+    for w=1:W
+      f(:,w)=ifft(repmat(fft(c{m}(:,w)),a(m),1).*G);
+    end;
+  end;  
+  
 else
+  a=a(1);
+  
+  if iscell(c)
+    % Convert the input to a matrix to use the uniform code.
+    N=size(c{1},1);
+    c=reshape(cell2mat(c),N,M);    
+  end;
+  
   N=size(c,1);
   L=N*a;
   W=size(c,3);
   
   G=zeros(L,M);
-  for ii=1:M
-    G(:,ii)=fft(fir2long(g{ii},L));
+  for m=1:M
+    G(:,m)=fft(fir2long(g{m},L));
   end;
   
   f=zeros(L,W);
