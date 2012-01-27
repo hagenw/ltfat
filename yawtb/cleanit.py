@@ -43,6 +43,9 @@ patternssimplified = [
     ('\\_',                    '_'), 
     ('\\YAWTB',                'YAWTB'),
     ('\\Matlab',                'Matlab'),
+    ('\\begin{itemize}',       ''),
+    ('\\end{itemize}',         ''),
+    ('\\item ',                '* '),
     ('>> ',                     '')]
 
 
@@ -81,18 +84,10 @@ def do_inputoutput(header,sections,secname,title):
         descbuf=[]
 
         for line in buf:
-            if line.find('\\item')>-1:
-                # There are two standards in the code to check for
-                # \item[KEY] 
-                # and
-                # \item key
+            if line.find('\\item[')>-1:
 
-                if '\\item[' in line:
-                    line=line.replace('\\item[','')
-                    seppos=line.find(']')
-                else:
-                    line=line.replace('\\item ','')
-                    seppos=line.find(' ')
+                line=line.replace('\\item[','')
+                seppos=line.find(']')
 
                 key=line[:seppos]
                 # Clear the type description from the line
