@@ -41,6 +41,8 @@ patterns = [
 patternssimplified = [
     ('\\url{"',                '"'), 
     ('\\_',                    '_'), 
+    ('\\YAWTB',                'YAWTB'),
+    ('\\Matlab',                'Matlab'),
     ('>> ',                     '')]
 
 
@@ -80,10 +82,33 @@ def do_inputoutput(header,sections,secname,title):
 
         for line in buf:
             if line.find('\\item')>-1:
-                line=line.replace('\\item[','')
-                seppos=line.find(']')
+                # There are two standards in the code to check for
+                # \item[KEY] 
+                # and
+                # \item key
+
+                if '\\item[' in line:
+                    line=line.replace('\\item[','')
+                    seppos=line.find(']')
+                else:
+                    line=line.replace('\\item ','')
+                    seppos=line.find(' ')
+
                 key=line[:seppos]
-                descbuf.append((key,[line[seppos+1:]]))
+                # Clear the type description from the line
+                desc=line[seppos+1:]
+
+                # Kill the type definer
+                p=re.search('\[.*\]',desc)
+                if p:
+                    desc=desc[0:p.start(0)]+desc[p.end(0):]
+
+                    # Kill the additional colon
+                    desc=desc.lstrip()
+                    if desc[0]==':':
+                        desc=desc[1:].lstrip()
+
+                descbuf.append((key,[desc]))
             else:
                 descbuf[-1][1].append(line)
         
@@ -99,9 +124,9 @@ def do_inputoutput(header,sections,secname,title):
 
             
             for line in descbuf:
-                header.append('      '+line[0]+spaces[len(line[0]):]+' : '+line[1][0])
+                header.append('     '+line[0]+spaces[len(line[0]):]+' : '+line[1][0])
                 for extraline in line[1][1:]:
-                    header.append('         '+extraline)
+                    header.append('        '+spaces+extraline)
         
 
         #for line in buf:
@@ -138,23 +163,23 @@ for (key,match) in patternssimplified:
 
 # uppercase libfun
 while 1:
-    p=re.search('\\\\libfun{.*}',hh)
+    p=re.search('\\\\libfun{.*?}',hh)
     if not p:
         break
     if do_ltfat:
         hh=hh[0:p.start(0)]+hh[p.start(0)+8:p.end(0)-1].upper()+hh[p.end(0):]
     else:
-        hh=hh[0:p.start(0)]+'``'+hh[p.start(0)+8:p.end(0)-1]+'``'+hh[p.end(0):]
+        hh=hh[0:p.start(0)]+'|'+hh[p.start(0)+8:p.end(0)-1]+'|_'+hh[p.end(0):]
 
 # don't upcase libvar
 while 1:
-    p=re.search('\\\\libvar{.*}',hh)
+    p=re.search('\\\\libvar{.*?}',hh)
     if not p:
         break
     if do_ltfat:
         hh=hh[0:p.start(0)]+hh[p.start(0)+8:p.end(0)-1]+hh[p.end(0):]
     else:       
-        hh=hh[0:p.start(0)]+'``'+hh[p.start(0)+8:p.end(0)-1]+'``'+hh[p.end(0):]
+        hh=hh[0:p.start(0)]+'*'+hh[p.start(0)+8:p.end(0)-1]+'*'+hh[p.end(0):]
 
 
 
@@ -183,8 +208,8 @@ for line in buf[1:]:
 header.append('')
 
 # ------------ Do the Input and output argument ----------------
-do_inputoutput(header,sections,'subsecInputData','Input arguments:')
-do_inputoutput(header,sections,'subsecOutputData','Output arguments:')
+do_inputoutput(header,sections,'subsecInputData','Input parameters:')
+do_inputoutput(header,sections,'subsecOutputData','Output parameters:')
 
 # ------------ Do the description ---------------------------------
 sec=findsection(sections,'secDescription')
@@ -221,6 +246,7 @@ if sec<>None:
 
     if len(buf)>0:
         header.append('   Example:')
+        header.append('   --------')
         header.append('')
     for line in buf:
         header.append('   '+line)
@@ -233,10 +259,19 @@ sec=findsection(sections,'secSeeAlso')
 
 if sec<>None:
     # Split into lines, strip them, kill the first one, and kill empty lines.
+    sec=sec.replace('/','')
+    sec=sec.replace('$','')
     buf=filter(lambda x:len(x)>0,map(lambda x:x.strip(),sec.split('\n'))[1:])
+ 
+    if len(buf)>0:   
+        # Put in commas
+        refs = buf[0].strip()
+        refs=refs.replace(' ',', ')
 
-    if len(buf)>0:
-        header.append('   See also: '+buf[0])
+        # Clean up after too many commas
+        refs=refs.replace(',,',',')
+
+        header.append('   See also: '+refs)
         header.append('')
 
 # ------------- Search for code ------------- 
@@ -245,17 +280,20 @@ out=[]
 code_on=0
 skip=0
 for line in header:
-    if line.find('begin{code}')>-1:
+    if line.find('begin{code}')>-1: 
+        out.append('   ::')
+        out.append('')
         code_on=1
         skip=1
     if line.find('end{code}')>-1:
+        out.append('')
         code_on=0
         skip=1
     if skip:
         skip=0
     else:
         if code_on:
-            out.append('C '+line)
+            out.append('  '+line)
         else:
             out.append(line)            
 
@@ -269,16 +307,19 @@ code_on=0
 skip=0
 for line in header:
     if line.find('begin{verbatim}')>-1:
+        out.append('   ::')
+        out.append('')
         code_on=1
         skip=1
     if line.find('end{verbatim')>-1:
+        out.append('%')
         code_on=0
         skip=1
     if skip:
         skip=0
     else:
         if code_on:
-            out.append('M '+line)
+            out.append('  '+line)
         else:
             out.append(line)            
 
@@ -297,15 +338,33 @@ while ii< len(code):
 
 code=code[0:ii]
 
+# Post-processing the header
+
+# Remove right spaces
+header = map(lambda x:x.rstrip(),header)
+
+
 if 1:
     print lineone[0],
-    for line in header:
-        print '%'+line
+    for ii in range(len(header)):
+        line = header[ii]
 
-    print  '%HANDEDIT THIS FILE'
+        # Skip empty line if next line is also empty
+        if (len(line.strip())==0):
+            # Don't print the empty line if it is the last one
+            if ii==len(header)-1:
+                continue
+
+            # Don't print the empty line if the next one is also empty
+            if len(header[ii+1].strip())==0:
+                continue
+
+        print '%'+line
 
     print C
 
     for line in code:
         print line,
+
+    print  '%HANDEDIT THIS FILE'
 
