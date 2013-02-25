@@ -8,7 +8,7 @@ fup = bname[0:-2].upper()
 
 do_ltfat=0
 
-print fname
+#print fname
 
 patterns = [
     ('\\manchap',             fup) ,
@@ -268,6 +268,18 @@ if sec<>None:
 
         header.append('   See also: '+refs)
         header.append('')
+
+# ------------- Do the see also:
+
+sec=findsection(sections,'secReference')
+
+if sec<>None:
+    # Split into lines, strip them, kill the first one
+    buf=map(lambda x:x.strip(),sec.split('\n'))[1:]
+
+    header.append('   References: HANDEDIT')
+    for line in buf:
+        header.append('   '+line)
 
 # ------------- Search for code ------------- 
 
