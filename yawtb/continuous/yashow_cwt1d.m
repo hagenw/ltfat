@@ -22,9 +22,9 @@ function yashow_cwt1d(yawres,varargin)
 %
 % \item[thresh] [REAL SCALAR $\in[0,1]$]: the thresholding of the displayed
 % matrix. Default value is 0.05 that is 5\%.
-% \end{description} 
 %
 % \item['edgeeffect'] [BOOL]: display the edge effects on the cwt.
+% \end{description} 
 %
 % \mansubsecOutputData
 %

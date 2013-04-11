@@ -50,7 +50,7 @@ function out = cwt1dt(fsig, wavname, scales, velos, varargin)
 %
 % \mansubsecOutputData
 % \begin{description}
-% \item{out} [STRUCT]: the output of the transform. A structured
+% \item[out] [STRUCT]: the output of the transform. A structured
 %   data with the following fields:
 %   \begin{itemize}
 %   \item \libvar{out.data} [3D or 4D MATRIX]: wavelet coefficients

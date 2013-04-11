@@ -49,7 +49,7 @@ function [out] = es2cauchy2d(kx,ky,apert,sigma,l,m)
 % \mansubsecOutputData
 %
 % \begin{description}
-% \item [out] [REAL MATRIX]: The wavelet in frequency plane. 
+% \item[out] [REAL MATRIX]: The wavelet in frequency plane. 
 % \end{description} 
 %
 % \mansecExample

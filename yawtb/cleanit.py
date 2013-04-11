@@ -6,6 +6,8 @@ fname = sys.argv[1]
 bname = os.path.basename(fname)
 fup = bname[0:-2].upper()
 
+fnameout=fname+'_out'
+
 do_ltfat=0
 
 #print fname
@@ -76,9 +78,9 @@ def do_inputoutput(header,sections,secname,title):
 
         # assertion check: first and last line must be starting and stopping itemize.
         if buf[0].find('begin{description}')==-1:
-            print 'ERRROR ITEMIZE ASSUMPTION FAILED 1'
+            print 'ERRROR ITEMIZE ASSUMPTION FAILED 1',fname
         if buf[-1].find('end{description}')==-1:
-            print 'ERRROR ITEMIZE ASSUMPTION FAILED 2'
+            print 'ERRROR ITEMIZE ASSUMPTION FAILED 2',fname
         buf=buf[1:-1]
 
         descbuf=[]
@@ -105,7 +107,12 @@ def do_inputoutput(header,sections,secname,title):
 
                 descbuf.append((key,[desc]))
             else:
-                descbuf[-1][1].append(line)
+                try:
+                    descbuf[-1][1].append(line)
+                except IndexError:
+                    print 'INDEXERROR 3',fname,title
+                    sys.exit()
+                    
         
         # Determine longest key
         longestkey=reduce(max,map(lambda x:len(x[0]),descbuf),0)
@@ -139,13 +146,24 @@ ii=0
 lineone=[]
 header=[]
 code=[]
-while buf[ii][0]!='%':
-    lineone.append(buf[ii])
-    ii=ii+1
+#if len(buf)==0:
+#    print 'Empty file',filename
+#    sys.exit()
 
-while buf[ii][0]=='%':
-    header.append(buf[ii][1:]),
-    ii=ii+1
+try:
+    while buf[ii][0]!='%':
+        lineone.append(buf[ii])
+        ii=ii+1
+except IndexError:
+    print ' --- INDEX ERROR',fname
+
+try:
+
+    while buf[ii][0]=='%':
+        header.append(buf[ii][1:]),
+        ii=ii+1
+except IndexError:
+    print ' --- INDEX ERROR 2',fname
 
 for ij in range(ii,len(buf)):
     code.append(buf[ij])
@@ -164,7 +182,7 @@ while 1:
     if do_ltfat:
         hh=hh[0:p.start(0)]+hh[p.start(0)+8:p.end(0)-1].upper()+hh[p.end(0):]
     else:
-        hh=hh[0:p.start(0)]+'|'+hh[p.start(0)+8:p.end(0)-1]+'|_'+hh[p.end(0):]
+        hh=hh[0:p.start(0)]+'|'+hh[p.start(0)+8:p.end(0)-1]+'|'+hh[p.end(0):]
 
 # don't upcase libvar
 while 1:
@@ -186,7 +204,12 @@ header=[];
 sec=findsection(sections,'chap')
 
 # Split into lines, strip them, kill the first one, and kill empty lines.
-buf=filter(lambda x:len(x)>0,map(lambda x:x.strip(),sec.split('\n'))[1:])
+try:
+    buf=filter(lambda x:len(x)>0,map(lambda x:x.strip(),sec.split('\n'))[1:])
+except AttributeError:
+    print 'ATTRIBUTEERROR',fname
+    sys.exit()
+    
 if len(buf)==0:
     header.append(fup+'  XXX Description is missing')
 else:    
@@ -350,9 +373,13 @@ code=code[0:ii]
 # Remove right spaces
 header = map(lambda x:x.rstrip(),header)
 
+if len(lineone)==0:
+    print "EMPTY FIRST LINE",fname
+    sys.exit()
 
+fout=file(fnameout,'w')
 if 1:
-    print lineone[0],
+    fout.write(lineone[0])
     for ii in range(len(header)):
         line = header[ii]
 
@@ -366,12 +393,12 @@ if 1:
             if len(header[ii+1].strip())==0:
                 continue
 
-        print '%'+line
+        fout.write('%'+line+'\n')
 
-    print C
+    fout.write(C+'\n')
 
     for line in code:
-        print line,
+        fout.write(line)
 
-    print  '%HANDEDIT THIS FILE'
+    fout.write('%HANDEDIT THIS FILE\n')
 
