@@ -1,6 +1,6 @@
 function W = dwvd(f);
 %DWVD discrete Wigner-Ville distribution
-%   Usage R = instaucorr(f);
+%   Usage W = dwvd(f);
 %
 %   Input parameters:
 %         f      : Input signal.
@@ -10,12 +10,13 @@ function W = dwvd(f);
 %
 % `dwvd(f)` computes the discrete Wigner-Ville distribution. The
 % discrete Wigner-Ville distribution is computed as the discrete 
-% Fourier transform of the instantaneous autocorrelation function.
+% Fourier transform with respect to the translation of the 
+% instantaneous autocorrelation function.
 
 % AUTHOR: Jordy van Velthoven
 
 complainif_notenoughargs(nargin, 1, 'DWVD');
 
-R = instaucorr(f);
+R = iaf(f);
 
 W = 2.*fft(R);
