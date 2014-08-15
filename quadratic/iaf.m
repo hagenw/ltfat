@@ -1,6 +1,6 @@
-function R = instaucorr(f);
-%INSTAUCORR Instantaneous autocorrelation function
-%   Usage R = instaucorr(f);
+function R = iaf(f);
+%IAF Instantaneous autocorrelation function
+%   Usage R = iaf(f);
 %
 %   Input parameters:
 %         f      : Input signal.
@@ -8,7 +8,7 @@ function R = instaucorr(f);
 %   Output parameters:
 %         R      : Instantaneous autocorrelation.
 %
-% `instaucorr(f)` computes the instantaneous autocorrelation function. 
+% `iaf(f)` computes the instantaneous autocorrelation function. 
 %
 % For an input signal of length L the instantaneous autocorrelation is a L x L
 % matrix in which the column represents the translation and each row the time index.
