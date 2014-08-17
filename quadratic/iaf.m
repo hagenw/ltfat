@@ -8,23 +8,20 @@ function R = iaf(f);
 %   Output parameters:
 %         R      : Instantaneous autocorrelation.
 %
-% `iaf(f)` computes the instantaneous autocorrelation function. 
+% `iaf(f)` computes the instantaneous autocorrelation function. The instantaneous
+% autocorrelation function is given by
+% 
+% .. math:: math:: r(l+1, m+1) = \sum_{l=0}^{L-1} f(l+m+1)\overline{f(l-m+1)}
 %
 % For an input signal of length L the instantaneous autocorrelation is a L x L
 % matrix in which the column represents the translation and each row the time index.
 % 
-
+%
 
 % AUTHOR: Jordy van Velthoven
 
-complainif_notenoughargs(nargin, 1, 'instaucorr');
+complainif_notenoughargs(nargin, 1, 'iaf');
 
-L = length(f);
+[f,~,Ls,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
 
-R = zeros(L,L);
-
-for l = 1 : L
-    a = min([L-l, l-1, round(L/2)-1]);
-    t = -a: a;
-    R(t-t(1)+1, l) =  f(l+t).*conj(f(l-t));
-end
+R = comp_iaf(f, Ls);

@@ -9,14 +9,24 @@ function A = daf(f);
 %         R      : discrete ambiguity function
 %
 % `dwvd(f)` computes the discrete ambiguity function. The discrete
-% ambiguity function is computed as the discrete Fourier transform
-% with respect to the time index of the instantaneous autocorrelation 
-% function.
+% ambiguity function is computed by
+%
+% .. math:: w\left( l+1,\; k+1 \right)\; = \; 2 \sum_{\left| l\; <\; L/2 \right|}^{}{z\left( l + m + 1\right) \overline{z\left( l - m + 1 \right)}e^{-i2\pi kl/L}}
+%
+% 
 
 % AUTHOR: Jordy van Velthoven
 
 complainif_notenoughargs(nargin, 1, 'DAF');
 
-R = iaf(f);
+[f,~,Ls,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
 
-A = ifft(R);
+if isreal(f)
+ z = comp_anarep(f, Ls);
+else
+ z = f;
+endif;
+
+ia = comp_iaf(z, Ls);
+
+A = 2*ifft(ia);
