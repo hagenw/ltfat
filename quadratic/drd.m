@@ -1,6 +1,6 @@
 function r = drd(f);
 %DRD discrete Rihaczek distribution
-%   Usage W = dwvd(f);
+%   Usage W = drd(f);
 %
 %   Input parameters:
 %         f      : Input signal

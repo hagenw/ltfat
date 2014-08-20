@@ -24,7 +24,7 @@ if isreal(f)
  z = comp_anarep(f, Ls);
 else
  z = f;
-endif;
+end;
 
 ia = comp_iaf(z, Ls);
 
