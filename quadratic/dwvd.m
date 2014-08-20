@@ -8,7 +8,7 @@ function d = dwvd(f);
 %   Output parameters:
 %         d      : discrete Wigner-Ville distribution
 %
-% `dqtfd(f, q)` computes a discrete Wigner-Ville distribution. The discrete
+% `dwvd(f, q)` computes a discrete Wigner-Ville distribution. The discrete
 % Wigner-Ville distribution is computed by
 %
 % .. math:: w\left( l+1,\; k+1 \right)\; =\; 2 \sum_{\left| m\; <\; L/2 \right|}^{}{z\left( l+ 1 + m \right) \overline{z\left( l - m + 1 \right)}e^{-i2\pi km/L}}

@@ -1,5 +1,5 @@
 function A = daf(f);
-%DWVD discrete ambiguity function
+%DAF discrete ambiguity function
 %   Usage W = daf(f);
 %
 %   Input parameters:
@@ -8,7 +8,7 @@ function A = daf(f);
 %   Output parameters:
 %         R      : discrete ambiguity function
 %
-% `dwvd(f)` computes the discrete ambiguity function. The discrete
+% `daf(f)` computes the discrete ambiguity function. The discrete
 % ambiguity function is computed by
 %
 % .. math:: w\left( l+1,\; k+1 \right)\; = \; 2 \sum_{\left| l\; <\; L/2 \right|}^{}{z\left( l + m + 1\right) \overline{z\left( l - m + 1 \right)}e^{-i2\pi kl/L}}
