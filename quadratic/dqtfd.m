@@ -22,14 +22,4 @@ complainif_notenoughargs(nargin, 2, 'DQTFD');
 
 [f,~,Ls,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
 
-if isreal(f)
- z = comp_anarep(f, Ls);
-else
- z = f;
-end;
-
-i = comp_iaf(z, Ls);
-
-c = conv2(i, q, 'same');
-
-p = 2*fft(c);
+p = comp_dqtfd(f, q, Ls);
