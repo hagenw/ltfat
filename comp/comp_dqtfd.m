@@ -5,7 +5,7 @@ function p = comp_dqtfd(f, q, Ls);
 %   Input parameters:
 %         f      : Input signal
 %	  q	 : Kernel
-%	  L 	 : length of f
+%	  Ls 	 : length of f
 %
 %   Output parameters:
 %         p      : discrete quadratic time-frequency distribution

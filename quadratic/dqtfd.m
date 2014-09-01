@@ -3,12 +3,13 @@ function p = dqtfd(f, q);
 %   Usage p = dqtfd(f);
 %
 %   Input parameters:
-%         f      : Input signal
+%         f      : Vector
 %	  q	 : Kernel
 %
 %   Output parameters:
 %         p      : discrete quadratic time-frequency distribution
-%
+% 
+% For an input vector of length L, the kernel should be a L x L matrix.
 % `dqtfd(f, q)` computes a discrete quadratic time-frequency distribution. A
 % discrete quadratic time-frequency distribution with kernel q(p,m) is computed 
 % by
