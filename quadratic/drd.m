@@ -9,17 +9,20 @@ function r = drd(f);
 %         d      : discrete Rihaczek distribution
 %
 % `drd(f)` computes a discrete discrete Rihaczek distribution.
-% The discrete Rihaczek distribution is given by
+% The discrete Rihaczek distribution is computed by
 %
-% .. math:: r\left( l,\; k \right)\; =\; \sum_{l\; =\; 0}^{L\; -\; 1}{f\left( l \right)\overline{f\left( l\; -\; h \right)}e^{-2\pi ikh/L}}
+% .. math:: r\left( k+1,\; l+1 \right)\; =\; f\left( l+1 \right)\; \overline{c\left( k+1 \right)}e^{-2\pi ikl/L}
 %
+% where $k, l=0,\ldots,L-1$ and $c$ is the Fourier transform of $f$.
 
 % AUTHOR: Jordy van Velthoven
+% TESTING: TEST_DRD
+% REFERENCE: REF_DRD
 
 complainif_notenoughargs(nargin, 1, 'DRD');
 
 [f,~,Ls,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
 
-c = comp_dgt_long(f, f, 1, Ls);
+c = dgt(f, f, 1, Ls);
 
 r = dsft(c);
