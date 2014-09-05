@@ -4,7 +4,7 @@ function R = comp_iaf(f, Ls);
 %
 %   Input parameters:
 %         f      : Input signal.
-%	  L 	 : length of f.
+%	  Ls 	 : length of f.
 %
 %   Output parameters:
 %         R      : Instantaneous autocorrelation.
@@ -17,8 +17,9 @@ function R = comp_iaf(f, Ls);
 
 R = zeros(Ls,Ls);
 
-for l = 1 : Ls
-    a = min([Ls-l, l-1, round(Ls/2)-1]);
-    m = -a: a;
-    R(m-m(1)+1, l) =  f(l+m).*conj(f(l-m));
+
+for l = 0 : Ls-1;
+   m = -min([Ls-l, l, round(Ls/2)-1]) : min([Ls-l, l, round(Ls/2)-1]);
+   R(mod(Ls+m,Ls)+1, l+1) =  f(mod(l+m, Ls)+1).*conj(f(mod(l-m, Ls)+1));
 end
+
