@@ -11,6 +11,7 @@ function W=ref_dwvd(f)
 
 L = length(f);
 H = floor(L/2);
+R = zeros(L,L);
 W = zeros(L,L);
 
 % Compute the analytic representation of f
@@ -20,7 +21,7 @@ if isreal(f)
   z(H+2:L) = 0;
   z = ifft(z);
 else
-z = f;
+  z = f;
 end
 
 % Compute instantaneous autocorrelation matrix R
@@ -30,12 +31,13 @@ for l = 0 : L-1;
   end
 end
 
-% Compute the Fourier matrix F
-for k=0:L-1
-  for n=0:L-1
-    F(k+1, n+1) = exp(2*pi*i*k*n/L);
+% Compute the Discrete Wigner-Ville distribution W
+for hh=0:L-1
+  for ii=0:L-1
+    for jj = 0:L-1
+      W(hh+1, ii+1) = W(hh+1, ii+1) + R(jj+1, ii+1) .* exp(-2*pi*i*hh*jj/L);
+    end
   end
 end
 
-% Compute the discrete Wigner-Ville distribution W
-W = 2*(F'*R);
+W = 2*W;

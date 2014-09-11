@@ -15,9 +15,9 @@ function d = dwvd(f);
 %
 % where $r(n,m)$ is given by
 %
-% .. math:: r\left( m,n \right)\; =\; f\left( n+m \right)f\left( n-m \right)
+% .. math:: r\left( m,n \right)\; =\; f\left( n+m \right)\overline{f\left( n-m \right)}
 %
-% with $n \in {-L/2,\ldots, L/2}. 
+% with $m \in {-L/2,\ldots, L/2 -1}. 
 
 % AUTHOR: Jordy van Velthoven
 % TESTING: TEST_DWVD
