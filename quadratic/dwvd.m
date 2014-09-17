@@ -1,9 +1,9 @@
 function d = dwvd(f);
 %DWVD discrete Wigner-Ville distribution
-%   Usage W = dwvd(f);
+%   Usage W = dwvd(f);  
 %
 %   Input parameters:
-%         f      : Input signal
+%         f      : Input vector
 %
 %   Output parameters:
 %         d      : discrete Wigner-Ville distribution
@@ -11,13 +11,13 @@ function d = dwvd(f);
 % `dwvd(f)` computes the discrete Wigner-Ville distribution of f. The discrete
 % Wigner-Ville distribution is computed by
 %
-% .. math:: w\left( n+1,k+1 \right)\; =\; 2\sum_{m=0}^{L-1}{r\left( n+1,m+1 \right)e^{-i2\pi mk/L}}
+% .. math:: W\left( n+1,k+1 \right)\; =\; 2\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{-i2\pi mk/L}}
 %
-% where $r(n,m)$ is given by
+% where $R(n,m)$ is given by
 %
-% .. math:: r\left( m,n \right)\; =\; f\left( n+m \right)\overline{f\left( n-m \right)}
+% .. math:: R\left( m,n \right)\; =\; z\left( n+m \right)\overline{z\left( n-m \right)}
 %
-% with $m \in {-L/2,\ldots, L/2 -1}. 
+% with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as analytical representation of $f$.
 
 % AUTHOR: Jordy van Velthoven
 % TESTING: TEST_DWVD

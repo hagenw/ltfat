@@ -1,21 +1,23 @@
 function A = daf(f);
 %DAF discrete ambiguity function
-%   Usage W = daf(f);
+%   Usage A = daf(f);
 %
 %   Input parameters:
-%         f      : Input signal.
+%         f      : Input vector.
 %
 %   Output parameters:
-%         R      : discrete ambiguity function
+%         A      : discrete ambiguity function
 %
-% `daf(f)` computes the discrete ambiguity function. The discrete
+% `daf(f)` computes the discrete ambiguity function of f. The discrete
 % ambiguity function is computed by
 %
-% .. math:: w\left( l+1,\; k+1 \right)\; = \; 2 \sum_{\left| l\; <\; L/2 \right|}^{}{z\left( l + m + 1\right) \overline{z\left( l - m + 1 \right)}e^{-i2\pi kl/L}}
+% .. math:: A\left( v+1,m+1 \right)\; =\; \frac{2}{L}\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{i2\pi nv/L}}
 %
-% 
+% with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as the analytical representation of $f$.
 
 % AUTHOR: Jordy van Velthoven
+% TESTING: TEST_DAF
+% REFERENCE: REF_DAF
 
 complainif_notenoughargs(nargin, 1, 'DAF');
 
