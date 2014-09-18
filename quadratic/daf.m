@@ -29,6 +29,6 @@ else
  z = f;
 end;
 
-ia = comp_iaf(z, Ls);
+R = comp_instcm(z,z,Ls);
 
-A = 2*ifft(ia);
+A = 2*ifft(R);

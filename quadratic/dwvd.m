@@ -1,6 +1,6 @@
 function d = dwvd(f);
 %DWVD discrete Wigner-Ville distribution
-%   Usage W = dwvd(f);  
+%   Usage W = dwvd(f);
 %
 %   Input parameters:
 %         f      : Input vector
@@ -33,6 +33,6 @@ else
  z = f;
 end;
 
-ia = comp_iaf(z, Ls);
+R = comp_instcm(z,z,Ls);
 
-d = 2*(fft(ia));
+d = 2*(fft(R));

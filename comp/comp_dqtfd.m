@@ -19,8 +19,8 @@ else
  z = f;
 endif;
 
-i = comp_iaf(z, Ls);
+R = comp_instcm(z,z,Ls);
 
-c = fftshift(ifft2(fft2(i).*fft2(q)));
+c = fftshift(ifft2(fft2(R).*fft2(q)));
 
 p = 2*fft(c);
