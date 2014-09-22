@@ -7,21 +7,38 @@ disp(' ===============  TEST_DWVD ==============');
 
 for ii = 1: length(Lr)
   L = Lr(ii);
-    for type = {'real', 'complex'}
+    for n = 1:4
     
-    if strcmp(type{1}, 'real')
+    if (n==1)
+    type1 = 'auto';
+    type2 = 'real';
     f = tester_rand(L,1);
-    else
+    g = f;
+    elseif (n==2)
+    type1 = 'auto';
+    type2 = 'complex';
     f = tester_crand(L,1);
+    g = f;
+    elseif (n==3)
+    type1 = 'cross';
+    type2 = 'real';
+    f = tester_rand(L,1);
+    g = tester_rand(L,1);
+    elseif (n==4)
+    type1 = 'cross';
+    type2 = 'complex';
+    f = tester_crand(L,1);
+    g = tester_crand(L,1);
     end
   
-    r1 = ref_dwvd(f);
-    r2 = dwvd(f);
+    r1 = ref_dwvd(f,g);
+    r2 = dwvd(f,g);
   
     res = norm(r1-r2);
   
     [test_failed, fail] = ltfatdiditfail(res, test_failed);
-    s = sprintf('DWVD %3s L:%3i %0.5g %s', type{1}, L, res, fail);
+    s = sprintf('DWVD %3s %3s L:%3i %0.5g %s', type1, type2, L, res, fail);
     disp(s);
     end
+end
 end

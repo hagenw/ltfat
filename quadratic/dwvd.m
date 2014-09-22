@@ -1,9 +1,10 @@
-function d = dwvd(f);
+function W = dwvd(f,g);
 %DWVD discrete Wigner-Ville distribution
 %   Usage W = dwvd(f);
+%         W = dwvd(f, g);
 %
 %   Input parameters:
-%         f      : Input vector
+%         f,g    : Input vector(s)
 %
 %   Output parameters:
 %         d      : discrete Wigner-Ville distribution
@@ -17,7 +18,9 @@ function d = dwvd(f);
 %
 % .. math:: R\left( m,n \right)\; =\; z\left( n+m \right)\overline{z\left( n-m \right)}
 %
-% with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as analytical representation of $f$.
+% with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as analytical representation of $f$ when f is real-valued.
+%
+% `dwvd(f,g)` computes the discrete cross-Wigner-Ville distribution of f and g.
 
 % AUTHOR: Jordy van Velthoven
 % TESTING: TEST_DWVD
@@ -25,14 +28,37 @@ function d = dwvd(f);
 
 complainif_notenoughargs(nargin, 1, 'DWVD');
 
-[f,~,Ls,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
 
-if isreal(f)
- z = comp_anarep(f, Ls);
-else
- z = f;
-end;
+if (nargin == 1)
 
-R = comp_instcm(z,z,Ls);
+  [f,~,Lf,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
+  
+  if isreal(f)
+    z1 = comp_anarep(f, Lf);
+    z2 = z1;
+  else
+    z1 = f;
+    z2 = z1;
+  end
+ 
+elseif (nargin == 2)
+  [f,~,Lf,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
+  [g,~,Lg,W,~,permutedsize,order]=assert_sigreshape_pre(g,[],[],upper(mfilename));
 
-d = 2*(fft(R));
+  if ~all(size(f)==size(g))
+  	error('%s: f and g must have the same length.', upper(mfilename));
+  end;
+  
+  if isreal(f) || isreal(g)
+    z1 = comp_anarep(f, Lf);
+    z2 = comp_anarep(g, Lg);
+  else
+    z1 = f;
+    z2 = g;
+  end;
+end
+
+R = comp_instcm(z1, z2, Lf);
+
+
+W = 2*fft(R);
