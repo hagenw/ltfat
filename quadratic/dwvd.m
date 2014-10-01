@@ -12,7 +12,7 @@ function W = dwvd(f,g);
 % `dwvd(f)` computes the discrete Wigner-Ville distribution of f. The discrete
 % Wigner-Ville distribution is computed by
 %
-% .. math:: W\left( n+1,k+1 \right)\; =\; 2\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{-i2\pi mk/L}}
+% .. math:: W\left( n+1,k+1 \right)\; =\; \sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{-i2\pi mk/L}}
 %
 % where $R(n,m)$ is given by
 %

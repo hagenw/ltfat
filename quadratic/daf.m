@@ -12,7 +12,7 @@ function A = daf(f, g);
 % `daf(f)` computes the discrete  ambiguity function of f. The discrete
 % ambiguity function is computed by
 %
-% .. math:: A\left( v+1,m+1 \right)\; =\; \frac{2}{L}\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{i2\pi nv/L}}
+% .. math:: A\left( v+1,m+1 \right)\; =\; L^{-1}\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{i2\pi nv/L}}
 %
 % where $R(n,m)$ is given by
 %
