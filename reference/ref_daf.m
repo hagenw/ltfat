@@ -65,4 +65,3 @@ for hh=0:L-1
 end
 
 A = A./L;
-A = 2*A;

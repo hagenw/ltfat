@@ -4,12 +4,12 @@ function A = daf(f, g);
 %         A = daf(f, g);
 %
 %   Input parameters:
-%         f, g   : Input vector(s).
+%         f, g      : Input vector(s).
 %
 %   Output parameters:
 %         A      : discrete ambiguity function
 %
-% `daf(f)` computes the discrete ambiguity function of f. The discrete
+% `daf(f)` computes the discrete  ambiguity function of f. The discrete
 % ambiguity function is computed by
 %
 % .. math:: A\left( v+1,m+1 \right)\; =\; \frac{2}{L}\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{i2\pi nv/L}}
@@ -33,7 +33,7 @@ if (nargin == 1)
   [f,~,Lf,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
   
   if isreal(f)
-    z1 = comp_anarep(f, Lf);
+    z1 = comp_analytic(f, Lf);
     z2 = z1;
   else
     z1 = f;
@@ -49,8 +49,8 @@ elseif (nargin == 2)
   end;
   
   if isreal(f) || isreal(g)
-    z1 = comp_anarep(f, Lf);
-    z2 = comp_anarep(g, Lg);
+    z1 = comp_analytic(f, Lf);
+    z2 = comp_analytic(g, Lg);
   else
     z1 = f;
     z2 = g;
@@ -60,4 +60,4 @@ end
 R = comp_instcm(z1, z2, Lf);
 
 
-A = 2*ifft(R);
+A = ifft(R);

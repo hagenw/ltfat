@@ -1,8 +1,8 @@
-function z = comp_anarep(f, Ls);
-%COMP_ANAREP Analytic representation
-%   Usage z = comp_anarep(f);
+function z = comp_analytic(f, Ls);
+%COMP_ANAREP Compute analytic representation
+%   Usage z = comp_analytic(f);
 %
-% `comp_anarep(f)` computes the analytic representation of f.  
+% `comp_analytic(f)` computes the analytic representation of f.  
 % The analytic representation is computed through the FFT of f.
 %
 

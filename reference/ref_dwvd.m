@@ -59,5 +59,3 @@ for hh=0:L-1
     end
   end
 end
-
-W = 2*W;
