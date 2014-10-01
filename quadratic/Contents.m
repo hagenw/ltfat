@@ -16,3 +16,6 @@
 %	Plotting routine
 %	 PLOTTFD		- Plot time-frequency distribution
 %
+%	Information about a quadratic distribution
+%	 TIMEMAR		- Time marginal
+%	 FREQMAR		- Frequency marginal
