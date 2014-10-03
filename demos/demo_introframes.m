@@ -2,41 +2,125 @@ function demo_introframes % RUNASSCRIPT
 %DEMO_INTROFRAMES Introduction to frames in finite dimension
 %
 %   This demonstration explains some basic concepts of frame theory using
-%   examples in $\mathbb{R}^L$ ($L=3$,$L=2$). 
+%   linear algebra examples in $\mathbb{R}^L$ ($L=3$,$L=2$). 
+%   The frames are created as columns of a matrix F
+%   Where applicable, the same task is solved using the frames framework.
+%
+%   We search for a solution of:
+%
+%   Fc = f
+%
+%   Coordinates *c* of *f* in frame *F*. 
 %
 %   References: 
 
 
-% Naimark theorem Parseval tight frame is a projection of a ONB from a
-% higher dimension
-% genral frame is a projection of a Riez basis froma higher dimension
+% Null space of F*: Fc=0
+% 
+% For full-space frames  
+% null(F*) = {0}
+
+% Invertible == bijective == injective kerT={0} (null) and surjective ranT = R^N
+% ker T = orth. complement of (ran T*)
+
+% Projection P is orthogonal if it is self adjoint.
+
+% Frames for subspaces of R^2
 
 % Tightness
 
 % Equal norm
 
 % Maximally robust (every n x n submatrix of F* is invertible)
+% (Full spark)
 
 % Equiangularity
 
+% Equivalence of frames (isomorphism of frames): Frames F,G are equivalent 
+% (or uniratily isomorphic) if UF=G, where U is arbitrary square matrix. 
+% Parseval tight frame obtained as G = S^(-1/2)F is equivalent with F as
+% well as the canonical dual frame is isomorphic (the only one among all 
+% dual frames). Kernels and ranges are equal.
+% Unitary isomorphic frames: The same but U is unitary. 
+% ||Fc|| == ||Gc||
+% F*F==G*G
+
+
 % Symmetry https://www.math.auckland.ac.nz/~waldron/Preprints/Frame-symmetries/CA-02-060-RD.pdf
 
-% If Φ is a frame then_
-% (1) V ΦU is a frame for any invertible matrices U, V .
-% (2) If Φ is tight frame/unit-norm tight frame, then aVΦU is tight
-% frame/unit-norm tight frame for any unitary matrices U, V
-% and a = 0.
-%(3) If Φ is equal-norm, then aDΦU is equal-norm for any
+% Naimark theorem Parseval tight frame is a projection of a ONB from a
+% higher dimension, general frame is a projection of a Riez basis from a higher dimension
+
+% If F is a frame then_
+% (1) VFU is a frame for any invertible matrices U, V .
+% (2) If F is tight frame/unit-norm tight frame, then aVFU is tight
+% frame/unit-norm tight frame for any unitary matrices U, V and a ~= 0.
+%(3) If F is equal-norm, then aDFU is equal-norm for any
 %diagonal unitary matrix D, unitary matrix U , and a = 0.
-%(4) If Φ is maximally robust, then DΦU is maximally robust
+%(4) If F is maximally robust, then DFU is maximally robust
 %for any invertible diagonal matrix D and any invertible
 %matrix U .
-%(5) If Φ is unit-norm tight frame and maximally robust, then
-%DΦU is unit-norm tight frame and maximally robust for any
+%(5) If F is unit-norm tight frame and maximally robust, then
+%DFU is unit-norm tight frame and maximally robust for any
 %unitary diagonal matrix D and any unitary matrix U .
 
-F1 = eye(3);
-plotfinframe(F1);
+% Example 1
+f = [0.1,0.2,0.3]';
+% Orthonormal basis is R^3
+F1 = eye(3); %F1(end) = 0.98;
+F1fr = frame('gen',F1);
+% Analysis operator F1'*
+c1 = F1'*f;
+c1fr = frana(F1fr,f);
+norm(c1-c1fr)
+
+A = min(svd(F1))^2;
+B = max(svd(F1))^2;
+
+[Afr,Bfr]=framebounds(F1fr);
+
+% Condition number is a
+norm(cond(F1) - B/A) 
+
+% Norm of a matrix
+norm(norm(F1) - sqrt(B))
+
+% Redundancy of a frame
+[M,N] = size(F1);
+M/N - framered(F1fr);
+
+% Is it tight?
+A == B
+
+% Is it Parseval tight
+(A == 1 && B == 1)
+
+% Is it equal norm?
+all(sum(F1.^2).^(1/2) == norm(F1(:,1)))
+
+% Is it equiangular?
+% (All off-diagonal entries in the Gram matrix should be equal)
+G = F1'*F1;
+all( G(~eye(size(G))) == G(1,2) )
+
+plotCurrent(F1,f,f)
+
+% [U,s,V]=svd([1,0;0,1;1,1]);
+
+% Project orthonormal basis in 3D to a 2D plane and check properties 
+% of the resulting frame (Naimark theorem) 
+
+
+% Another orthonormal basis in R^3
+% This is unitary isomorphism to F1 as it is obtained
+% as F2=R*F1, where R is unitary rotation matrix.
+% Gram matrices of frames F1 and F2 are equal
+% (rotated by 20 degrees)
+F2 = rot(F1,20);
+plotfinframe(F2);
+plotCurrent(F2,f,f)
+
+
 
 function plotfinframe(A,B)
 % Funkce vykresli v R^3 system generatoru obsazeny ve sloupcich A,
@@ -78,16 +162,17 @@ if m ~= 3
     return
 end
 
-figure(1);
+
 clf;
 % dva frejmy
-h = plotfinframe(A);
+plotfinframe(A);
+hold on;
 zer = zeros(3,1);
 
 % vykresleni puvodniho a rekonstruovaneho vektoru
 bJsouTotozne = norm(x-xhat) < 1e-3;
 
-axes(h)
+
 h = plot3(x(1),x(2),x(3),'Xk'); % vykreslení pùvodního vektoru
 set(h,'LineWidth',2);
 set(h,'MarkerSize',12);
@@ -106,6 +191,7 @@ if ~bJsouTotozne
 end
 axis auto
 axis equal
+hold off;
 
 function [xhat,dualsystem,coefs] = demo_frejmy(A,f)
 
@@ -155,4 +241,19 @@ if ~bJsouTotozne
 end
 axis auto
 axis equal
+
+function F = rot(F,angle,axis)
+
+if nargin<3
+    rotaxis = [1,1,1]';
+end
+
+t = pi*angle/180;
+rotaxis = rotaxis/norm(rotaxis);
+u = rotaxis(1); v = rotaxis(2); w = rotaxis(3);
+R = [u^2+(1-u^2)*cos(t), u*v*(1-cos(t))-w*sin(t), u*w*(1-cos(t))+v*sin(t);...
+     u*v*(1-cos(t))+w*sin(t), v^2+(1-v^2)*cos(t), v*w*(1-cos(t))-u*sin(t);...
+     u*w*(1-cos(t))-w*sin(t), v*w*(1-cos(t))+u*sin(t), w^2+(1-w^2)*cos(t) ];
+ 
+F = R*F;
 
