@@ -1,5 +1,5 @@
 function R=ref_drd(f)
-%REF_DRD  Reference DRD
+%REF_DRD  Reference discrete Rihaczek distribution
 %   Usage:  R=ref_drd(f)
 %
 %   REF_DRD(f) computes the discrete Rihaczek distribution of f.

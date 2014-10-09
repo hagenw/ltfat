@@ -3,7 +3,7 @@ function p = dqtfd(f, q);
 %   Usage p = dqtfd(f);
 %
 %   Input parameters:
-%         f      : Vector
+%         f      : Input vector
 %	  q	 : Kernel
 %
 %   Output parameters:

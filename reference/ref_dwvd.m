@@ -2,7 +2,7 @@ function W=ref_dwvd(f,g)
 %REF_DWVD  Reference discrete wigner-Ville distribution
 %   Usage:  W=ref_dwvd(f)
 %
-%   REF_DWVD(f) computes the discrete Wigner-Ville distribution of f.
+%   REF_DWVD(f,g) computes the discrete Wigner-Ville distribution of f and g.
 
 % AUTHOR: Jordy van Velthoven
 
@@ -51,7 +51,7 @@ for l = 0 : L-1;
   end
 end
 
-% Compute the discrete ambiguity function
+% Compute the discrete Wigner-Ville function
 for hh=0:L-1
   for ii=0:L-1
     for jj = 0:L-1

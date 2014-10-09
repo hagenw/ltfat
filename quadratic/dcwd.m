@@ -12,7 +12,6 @@ function p = dcwd(f, s);
 % `dcwd(f)` computes a discrete Choi-Williams distribution. The discrete
 % Choi-Williams distribution is computed by
 %
-% .. math:: 
 %
 
 % AUTHOR: Jordy van Velthoven

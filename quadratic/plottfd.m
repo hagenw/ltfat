@@ -2,7 +2,7 @@ function plottfd(p, varargin);
 %PLOTTFD Plot time-frequency distribution
 % Usage: plottfd(p);
 % 
-% 'plottfd(p)' plots the quadratic time-frequency distribution on the
+% 'plottfd(p)' plots the quadratic time-frequency distribution *p* on the
 % time-frequency plane.
 %
 % PLOTTFD takes the following additional arguments:

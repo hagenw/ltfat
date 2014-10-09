@@ -1,12 +1,12 @@
 function p = dbjd(f, s);
 %DBJD discrete Born-Jordan distribution
-%   Usage W = dbjd(f);
+%   Usage p = dbjd(f);
 %
 %   Input parameters:
 %         f      : Input signal
 %
 %   Output parameters:
-%         c      : discrete Born-Jordan distribution
+%         p      : discrete Born-Jordan distribution
 %
 % `dbjd(f)` computes a discrete Born-Jordan distribution. The discrete
 % Born-Jordan distribution is computed by
