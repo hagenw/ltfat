@@ -13,4 +13,4 @@ if ~all(M==N)
   error('%s: The input should be a square matrix.', upper(mfilename));
 end
 
-a = real(sum(q, 2))/N;
+a = real(sum(q, 2));
