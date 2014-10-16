@@ -1,9 +1,9 @@
-function test_failed = test_drd
+function test_failed = test_drihaczekdist
 Lr = [1, 19, 20];
 
 test_failed = 0;
 
-disp(' ===============  TEST_DRD ==============');
+disp(' ===============  TEST_DRIHACZEKDIST ==============');
 
 for ii = 1: length(Lr)
   L = Lr(ii);
@@ -15,13 +15,13 @@ for ii = 1: length(Lr)
     f = tester_crand(L,1);
     end
   
-    r1 = ref_drd(f);
-    r2 = drd(f);
+    r1 = ref_drihaczekdist(f);
+    r2 = drihaczekdist(f);
   
     res = norm(r1-r2);
   
     [test_failed, fail] = ltfatdiditfail(res, test_failed);
-    s = sprintf('DRD %3s L:%3i %0.5g %s', type{1}, L, res, fail);
+    s = sprintf('DRIHACZEKDIST %3s L:%3i %0.5g %s', type{1}, L, res, fail);
     disp(s);
     end
 end
