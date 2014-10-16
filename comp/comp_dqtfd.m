@@ -14,7 +14,7 @@ function p = comp_dqtfd(f, q, Ls);
 % AUTHOR: Jordy van Velthoven
 
 if isreal(f)
- z = comp_analytic(f, Ls);
+ z = comp_fftanalytic(f, Ls);
 else
  z = f;
 endif;
