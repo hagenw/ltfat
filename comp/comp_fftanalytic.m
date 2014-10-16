@@ -1,4 +1,4 @@
-function z = comp_fftanalytic(f, Ls);
+function z = comp_fftanalytic(f)
 %COMP_FFTANALYTIC Compute analytic representation
 %   Usage z = comp_fftanalytic(f, Ls);
 %
@@ -8,11 +8,12 @@ function z = comp_fftanalytic(f, Ls);
 
 % AUTHOR: Jordy van Velthoven
 
+Ls = size(f,1);
 H = floor(Ls/2);
 
 z = fft(f);
-z(2:Ls-H) = 2*z(2:Ls-H);
-z(H+2:Ls) = 0;
+z(2:Ls-H,:) = 2*z(2:Ls-H,:);
+z(H+2:Ls,:) = 0;
 z = ifft(z);
 
 
