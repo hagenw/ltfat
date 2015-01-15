@@ -1,22 +1,28 @@
-function [h,g,a,info] = wfilt_hden(N)
+function [h,g,a,info] = wfilt_hden(K)
 %WFILT_HDEN  Higher DENsity dwt filters (tight frame, frame)
-%   Usage: [h,g,a] = wfilt_hden(N);
+%   Usage: [h,g,a] = wfilt_hden(K);
 %
-%   `[h,g,a]=wfilt_hden(N)` computes Higher DENsity dwt filters (tight frame, frame).
+%   `[h,g,a]=wfilt_hden(K)` with $K \in {1,2,3,4}$ returns Higher DENsity 
+%   dwt filters (tight frame, frame) from the reference. The filterbanks 
+%   have 3 channels and unusual non-uniform subsamplig factors `[2,2,1]`.
 %
 %   Examples:
 %   ---------
 %   :::
-%
 %     wfiltinfo('hden3');
+%
+%   :::
+%     wfiltinfo('ana:hden4');
 %
 %   References: selesnick2006higher
 %
 
+% AUTHOR: Zdenek Prusa
+
 
 a= [2;2;1];
 info.istight = 1;
-switch(N)
+switch(K)
 case 1
 % from the paper Example 1.
 garr = [
@@ -25,7 +31,7 @@ garr = [
     0.707106781186548   0                    -0.5
     0.353553390593274   -0.353553390593274   0
 ];
-
+d = [-2,-2,-2];
 case 2
 % from the paper Example 2.
 garr = [
@@ -39,6 +45,7 @@ garr = [
     0.025752563665   -0.189604909379   0
 ];
 
+d = [-3,-5,-5];
 case 3
 % from the paper Example 3.
 garr = [
@@ -53,7 +60,7 @@ garr = [
   -0.076963057605    0.028685132531   0.009751852004
   -0.048477254777    0.022033327573   0
 ];
-
+ d = [-6,-4,-4];
 case 4
     info.istight = 0;
     % from the paper Example 5. Is not a tight frame!
@@ -71,9 +78,12 @@ case 4
        0.011217   0           0 
        0.027222   0           0  
     ];
+    d = [-5,-5,-5];
+
     harr = flipud(harr);
     h=mat2cell(harr,size(harr,1),ones(1,size(harr,2)));
-    h=cellfun(@(gEl) struct('h',gEl,'offset',-numel(gEl)/2+1),h,'UniformOutput',0);
+    h=cellfun(@(gEl,dEl) struct('h',gEl,'offset',dEl),h,num2cell(d),...
+              'UniformOutput',0);
 
 
         garr = [
@@ -92,7 +102,8 @@ case 4
         ];   
 
         g=mat2cell(garr,size(garr,1),ones(1,size(garr,2)));
-        g=cellfun(@(gEl) struct('h',gEl,'offset',-numel(gEl)/2+1),g,'UniformOutput',0);
+        g=cellfun(@(gEl,dEl) struct('h',gEl,'offset',dEl),g,num2cell(d),...
+                  'UniformOutput',0);
 
 
     return;
@@ -104,7 +115,7 @@ end
 
 %garr = flipud(harr);
 g=mat2cell(garr,size(garr,1),ones(1,size(garr,2)));
-g = cellfun(@(gEl) struct('h',gEl,'offset',-numel(gEl)/2),g,'UniformOutput',0);
+g = cellfun(@(gEl,dEl) struct('h',gEl,'offset',dEl),g,num2cell(d),'UniformOutput',0);
 h = g;
 
 

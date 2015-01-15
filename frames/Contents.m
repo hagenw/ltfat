@@ -13,6 +13,8 @@
 %    FRANA             - Frame analysis
 %    FRSYN             - Frame synthesis
 %    FRSYNMATRIX       - Frame synthesis operator matrix
+%    FRGRAMIAN	       - Frame Gramian operator
+%    FRAMEOPERATOR     - Frame operator
 %    FRAMEDIAG         - Diagonal of frame operator
 %    FRANAITER         - Iterative perfect reconstruction analysis
 %    FRSYNITER         - Iterative perfect reconstruction synthesis
@@ -33,6 +35,7 @@
 %    FRAMENATIVE2COEF  - Convert native to column format
 %    FRAMECOEF2TF      - Convert to time-frequency plane layout
 %    FRAMETF2COEF      - Convert TF-plane layout to native
+%    FRAMECOEF2TFPLOT  - Convert to time-frequency plane layout for plotting
 %
 %  Non-linear analysis and synthesis
 %    FRANABP           - Basis pursuit using the SALSA algorithm.

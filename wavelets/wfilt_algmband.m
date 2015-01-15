@@ -1,23 +1,25 @@
-function [h,g,a,info] = wfilt_algmband(N)
+function [h,g,a,info] = wfilt_algmband(K)
 %WFILT_ALGMBAND  An ALGebraic construction of orthonormal M-BAND wavelets with perfect reconstruction
-%   Usage: [h,g,a] = wfilt_algmband(N);
+%   Usage: [h,g,a] = wfilt_algmband(K);
 %
-%   `[h,g,a]=wfilt_algmband(N)` computes an algebraic construction of
-%   orthonormal m-band wavelets with perfect reconstruction. Critically
-%   subsampled.
+%   `[h,g,a]=wfilt_algmband(K)` with $K \in {1,2}$ returns wavelet filters
+%   from the reference paper. The filters are 3-band ($K==1$) and 4-band 
+%   ($K==2$) with critical subsampling.
 %
 %   Examples:
 %   ---------
 %   :::
+%     wfiltinfo('algmband1');  
 %
+%   :::
 %     wfiltinfo('algmband2');   
 %
 %   References:  lin2006algebraic  
 
+% AUTHOR: Zdenek Prusa
 
 
-
-switch(N)
+switch(K)
    case 1
    % from the paper Example 1.
       garr = [
@@ -29,6 +31,7 @@ switch(N)
              -0.14593600755399 0.42695403781698 0.24650202866523
              ];
       a= [3;3;3];
+      offset = [-3,-3,-3];
    case 2
       garr = [
               0.0857130200  -0.1045086525 0.2560950163  0.1839986022
@@ -49,12 +52,14 @@ switch(N)
              -0.0190928308 -0.1152813433 -0.0280987676 -0.0174753464
              ];
        a= [4;4;4;4];
+       offset = [-12,-8,-8,-12];
   otherwise
         error('%s: No such orthonormal M-band wavelet filter bank.',upper(mfilename));
 end
 
 g=mat2cell(flipud(garr),size(garr,1),ones(1,size(garr,2)));
-g = cellfun(@(gEl) struct('h',gEl,'offset',-floor((length(gEl)+1)/2)),g,'UniformOutput',0);
+g = cellfun(@(gEl,offEl) struct('h',gEl,'offset',offEl),g,num2cell(offset),...
+            'UniformOutput',0);
 
 h = g;
 info.istight=1;

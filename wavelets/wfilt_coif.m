@@ -4,20 +4,23 @@ function [h,g,a,info] = wfilt_coif(K)
 %   Usage: [h,g,a] = wfilt_coif(K);
 %
 %   `[h,g,a]=wfilt_coif(K)` with $K \in {1,2,3,4,5}$ returns a Coiflet
-%   filters of order $L=2K$ the number of vanishing moments of both the
+%   filters of order $2K$ the number of vanishing moments of both the
 %   scaling and the wavelet functions.
 %
-%   Values are taken from table 8.1 from the reference.
-%
-%   REMARK: There is a typo in 2nd element for K==1 
-%   
+%   Values are taken from table 8.1 from the reference. REMARK: There is 
+%   a typo in 2nd element for $K==1$.
 %
 %   Examples:
 %   ---------
 %   :::
 %     wfiltinfo('coif2');
+%
+%   :::
+%     wfiltinfo('coif5');
 % 
 %   References: daub98tenlectures
+
+% AUTHOR: Zdenek Prusa
 
 info.istight = 1;
 a = [2;2];
@@ -32,7 +35,7 @@ switch(K)
               0.238929728471
              -0.051429728471
             ];
-       d = 3;
+       d = [-3,-3];
     case 2 
        hlp = [
              -0.000509505399
@@ -48,7 +51,7 @@ switch(K)
              -0.029320137980
               0.011587596739           
              ];
-       d = 7;
+       d = [-7,-5]; 
     case 3 
        hlp = [
              -0.000024465734
@@ -70,7 +73,7 @@ switch(K)
               0.005503126709
              -0.002682418671   
              ];
-       d= 11;
+       d= [-11,-7];
     case 4 
        hlp = [
              -0.000001262175
@@ -98,7 +101,7 @@ switch(K)
              -0.001152224852
               0.000630961046   
              ];
-       d= 15;
+       d= [-15,-9];
     case 5 
        hlp = [
              -0.0000000673
@@ -132,7 +135,7 @@ switch(K)
               0.0002535612
              -0.0001499638    
              ];
-       d= 19;
+       d= [-19,-11];
   otherwise
         error('%s: No such COIFLET filters.',upper(mfilename)); 
 
@@ -143,7 +146,8 @@ hlp = hlp*sqrt(2);
 harr = [hlp, (-1).^(0:size(hlp,1)-1).'.*flipud(hlp)];
 
 h=mat2cell(harr,size(harr,1),ones(1,size(harr,2)));
-h=cellfun(@(hEl) struct('h',hEl(:),'offset',-d),h,'UniformOutput',0);
+h=cellfun(@(hEl,dEl) struct('h',hEl(:),'offset',dEl),h,num2cell(d),...
+          'UniformOutput',0);
 
 g = h;
 

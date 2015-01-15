@@ -1,5 +1,5 @@
 AC_PREREQ([2.62])
-AC_INIT([LTFAT], [1.4.4], [http://ltfat.sourceforge.net/contact.php], [ltfat])
+AC_INIT([LTFAT], [2.0.0], [http://ltfat.sourceforge.net/contact.php], [ltfat])
 
 AC_PROG_CC_C99
 AC_PROG_CXX
@@ -35,11 +35,10 @@ fi
 # Checking for portaudio, we pack portaudio.h with LTFAT
 # AC_CHECK_HEADER(portaudio.h)
 AC_CHECK_LIB(portaudio,Pa_GetHostApiCount,
-[have_libportaudio=1],
-[echo "Portaudio lib not found. Disabling support of the block processing framework." 
- have_libportaudio=0
- ])
-
+  [have_libportaudio=1],
+  [have_libportaudio=0
+   AC_MSG_WARN([Portaudio lib not found. Disabling support of the block processing framework.])]
+)
 
 AC_SUBST(have_libportaudio)
 AC_OUTPUT(Makefile)

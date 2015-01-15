@@ -3,18 +3,25 @@ function [h,g,a,info] = wfilt_symorth(N)
 %
 %   Usage: [h,g,a] = wfilt_symorth(N);
 %
-%   `[h,g,a]=wfilt_symorth(N)` with *N\in {1,2,3}*
+%   `[h,g,a]=wfilt_symorth(N)` with $N\in {1,2,3}$ returns orthogonal
+%   near-symmetric ($N==1$) and symmetric near-orthogonal ($N==[2,3]$)
+%   wavelet filters from the reference.
+%
+%   The filters exhibit a coiflet-like behavior i.e. the scaling filter
+%   has vanishing moments too.    
 %
 %   Examples:
 %   ---------
 %   :::
-%     figure(1);
 %     wfiltinfo('ana:symorth2');
-%     figure(2);
+%
+%   :::
 %     wfiltinfo('syn:symorth2');
 % 
 %   References: abdelnour2004
 %
+
+% AUTHOR: Zdenek Prusa
 
 info.istight = 0;
 a = [2;2];
@@ -36,11 +43,11 @@ case 1
            -A...
            ].';
        
-    harr = [hlp, (-1).^(0:numel(hlp)-1).'.*flipud(hlp)];  
+    harr = [flipud(hlp), (-1).^(1:numel(hlp)).'.*hlp];  
     
     garr = harr;   
     info.istight = 1;
-    offset = [-2,-4];
+    offset = [-5,-3];
 
 case 2
     % Example 2. From the reference. Symmetric near-orthogonal
@@ -77,7 +84,7 @@ case 2
          ];   
     harr = [hlp, (-1).^(0:numel(glp)-1).'.*flipud(glp)];
     garr = [glp, (-1).^(0:numel(hlp)-1).'.*flipud(hlp)];
-    offset = [-5,-5];
+    offset = [-6,-6];
 case 3
     % Example 1. from the reference. Symmetric near-orthogonal
     % K=5 vanishing moments (both low and high pass)
@@ -126,7 +133,7 @@ case 3
     harr = [hlp, (-1).^(1:numel(glp)).'.*glp];
     garr = [glp, (-1).^(1:numel(hlp)).'.*hlp];
     
-    offset = [-8,-8];
+    offset = [-9,-9];
   otherwise
         error('%s: No such filters.',upper(mfilename)); 
 

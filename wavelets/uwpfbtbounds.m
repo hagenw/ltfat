@@ -1,4 +1,4 @@
-function [AF,BF]=uwpfbtbounds(wt,L,varargin)
+function [AF,BF]=uwpfbtbounds(wt,varargin)
 %UWPFBTBOUNDS Frame bounds of Undecimated WPFBT
 %   Usage: fcond=uwpfbtbounds(wt,L);
 %          [A,B]=uwpfbtbounds(wt,L);
@@ -13,14 +13,28 @@ function [AF,BF]=uwpfbtbounds(wt,L,varargin)
 %
 %   See |wfbt| for explanation of parameter *wt*.
 %
+%   Additionally, the function accepts the following flags:
+%
+%   `'intsqrt'`(default),`'intnoscale'`, `'intscale'`
+%       The filters in the filterbank tree are scaled to reflect the
+%       behavior of |uwpfbt| and |iuwpfbt| with the same flags.
+%
+%   `'sqrt'`(default),`'noscale'`,`'scale'`
+%       The filters in the filterbank tree are scaled to reflect the
+%       behavior of |uwpfbt| and |iuwpfbt| with the same flags.  
+%              
+%
 %   See also: uwpfbt, filterbankbounds
 
+% AUTHOR: Zdenek Prusa
 
-complainif_notenoughargs(nargin,2,'UWPFBTBOUNDS');
 
+complainif_notenoughargs(nargin,1,'UWPFBTBOUNDS');
+
+definput.keyvals.L = [];
 definput.flags.scaling={'sqrt','scale','noscale'};
 definput.flags.interscaling = {'intsqrt', 'intscale', 'intnoscale'};
-[flags]=ltfatarghelper({},definput,varargin);
+[flags,~,L]=ltfatarghelper({'L'},definput,varargin);
 
 wt = wfbtinit({'strict',wt},'nat');
 
@@ -33,6 +47,10 @@ end
 
 % Do the equivalent filterbank using multirate identity property
 [gmultid,amultid] = wpfbt2filterbank(wt,flags.interscaling);
+
+if isempty(L)
+   L = wfbtlength(max(cellfun(@(gEl) numel(gEl.h),gmultid)),wt);  
+end
 
 % Scale filters 
 gmultid = comp_filterbankscale(gmultid, amultid, flags.scaling);

@@ -1,7 +1,7 @@
 function [f,relres,iter]=isgram(s,g,a,varargin)
 %ISGRAM  Spectrogram inversion
-%   Usage:  f=isgram(s,g,a);
-%           f=isgram(s,g,a,Ls);
+%   Usage:  f=isgram(c,g,a);
+%           f=isgram(c,g,a,Ls);
 %           [f,relres,iter]=isgram(...);
 %
 %   Input parameters:
@@ -62,7 +62,8 @@ function [f,relres,iter]=isgram(s,g,a,varargin)
 %     'printstep',p  If 'print' is specified, then print every p'th
 %                    iteration. Default value is p=10;
 %
-%   To use the BFGS method, please install the minFunc software from
+%   The BFGS method makes use of the minFunc software. To use the BFGS method, 
+%   please install the minFunc software from:
 %   `<http://www.cs.ubc.ca/~schmidtm/Software/minFunc.html>`_.
 %
 %   Examples:

@@ -107,7 +107,7 @@ public class SpectFrame {
       runInEDT(new Runnable() {
             @Override
             public void run() {
-                try {
+              /*  try {
                     // Set System L&F
                     UIManager.setLookAndFeel(
                             UIManager.getSystemLookAndFeelClassName());
@@ -120,7 +120,7 @@ public class SpectFrame {
                 } catch (IllegalAccessException e) {
                     // handle exception
                 }
-
+              */
                 //setColormap(cm);
                 jf = initFrame(width,height);
                 jf.pack();
@@ -128,6 +128,16 @@ public class SpectFrame {
         });
     }
 
+    public void requestFocus(){
+        runInEDT(new Runnable() {
+            @Override
+            public void run() {
+                if(jf != null){
+                    jf.requestFocus();
+                }
+            }
+        });
+    }
     public void setLocation(final double x, final double y){
         runInEDT(new Runnable() {
             @Override

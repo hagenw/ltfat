@@ -72,9 +72,9 @@ xr=(0:kv.xres-1)*aplot;
 
 % Move zero frequency to the center and Nyquist frequency to the top.
 if rem(kv.yres,2)==0
-  coef=circshift(coef,kv.yres/2-1);
+  cwork=circshift(cwork,kv.yres/2-1);
 else
-  coef=circshift(coef,(kv.yres-1)/2);
+  cwork=circshift(cwork,(kv.yres-1)/2);
 end;
 
 coef=zeros(kv.yres,kv.xres);
@@ -86,4 +86,8 @@ end;
 yr=[-1+2/kv.yres,1];
 
 coef=tfplot(coef,aplot,yr,'argimport',flags,kv);
+
+if nargout<1
+    clear coef;
+end
 

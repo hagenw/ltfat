@@ -1,22 +1,27 @@
-function [h,g,a,info] = wfilt_symdden(N)
-%WFILT_DDEN  Symmetric Dual-Density DWT filters (tight frame)
-%   Usage: [h,g,a] = wfilt_symdden(N);
+function [h,g,a,info] = wfilt_symdden(K)
+%WFILT_SYMDDEN  Symmetric Double-Density DWT filters (tight frame)
+%   Usage: [h,g,a] = wfilt_symdden(K);
 %
-%   `[h,g,a]=wfilt_symdden(N)` computes oversampled symmetric 
-%   double-density DWT filters. The redundancy is equal to 2.
+%   `[h,g,a]=wfilt_symdden(K)` with $K \in {1,2}$ returns oversampled
+%   symmetric double-density DWT filters. 
+%   The redundancy of the basic filterbank is equal to 1.5.
 %
 %   Examples:
 %   ---------
 %   :::
-%
 %     wfiltinfo('symdden1');
+%
+%   :::
+%     wfiltinfo('symdden2');
 %
 %   References: seab04
 %
 
+% AUTHOR: Zdenek Prusa
 
 
-switch(N)
+
+switch(K)
     case 1
 garr = [
     0.00069616789827   0.00120643067872  -0.00020086099895
@@ -30,7 +35,7 @@ garr = [
    -0.02692519074183   0.00776855801988  -0.04666026144290
     0.00069616789827  -0.00020086099895   0.00120643067872
 ];
-
+offset = [-5,-5,-5];
     case 2
 
 garr = [
@@ -47,12 +52,14 @@ garr = [
     0                  0.00549320005590   0.00549320005590
     0                 -0.00014203017443  -0.00014203017443
 ];
+offset = [-5,-5,-5];
     otherwise
         error('%s: No such Double Density DWT filter',upper(mfilename));
 end;
 
 g=mat2cell(garr,size(garr,1),ones(1,size(garr,2)));
-g = cellfun(@(gEl) struct('h',gEl(:),'offset',-numel(gEl)/2+1),g,'UniformOutput',0);
+g = cellfun(@(gEl,ofEl) struct('h',gEl(:),'offset',ofEl),...
+            g,num2cell(offset),'UniformOutput',0);
 h = g;
 a= [2;2;2];
 info.istight=1;

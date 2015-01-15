@@ -3,7 +3,8 @@ function [h,g,a,info] = wfilt_dden(N)
 %   Usage: [h,g,a] = wfilt_dden(N);
 %
 %   `[h,g,a]=wfilt_dden(N)` computes oversampled dyadic double-density DWT
-%   filters. The redundancy is equal to 2.
+%   filters. 
+%   The redundancy of the basic filterbank is equal to 1.5.
 %
 %   Examples:
 %   ---------
@@ -13,6 +14,8 @@ function [h,g,a,info] = wfilt_dden(N)
 %
 %   References: selesnick2001double
 %
+
+% AUTHOR: Zdenek Prusa
 
 
 offset = [];
@@ -27,7 +30,8 @@ garr = [
  -0.07549266151999   0.58114390323763  -0.46810169867282
  -0.05462700305610  -0.42222097104302   0
 ];
-offset = -3;
+garr = flipud(garr);
+offset = [-4,-2,-2];
 
     case 2
 % from the paper Table 2.2.
@@ -39,7 +43,8 @@ garr = [
  -0.07549266151999  -0.12615420862311   0
  -0.05462700305610  -0.09128604292445   0
 ];
-offset = -1;
+garr = flipud(garr);
+offset = [-4];
     case 3
 % from the paper Table 2.3.
 garr = [
@@ -50,7 +55,8 @@ garr = [
  -0.07549266151999  -0.21760444148150   0
  -0.05462700305610  -0.15746005307660   0
 ];
-offset = -2;
+garr = flipud(garr);
+offset = [-4,-2,-2];
     case 4
 % from the paper Table 2.5.
 garr = [
@@ -65,7 +71,8 @@ garr = [
   0.01823675069101   0.06967275075248   0
   0.01094193398389   0.04180320563276   0
 ];
-offset = -4;
+garr = flipud(garr);
+offset = [-6];
     case 5
 % from the paper Table 2.6.
 garr = [
@@ -80,7 +87,8 @@ garr = [
   0.01823675069101   0.66529265123158  -0.33794312751535
   0.01094193398389  -0.32893579192449   0
 ];
-offset = -5;
+garr = flipud(garr);
+offset = [-6,-2,-2];
     case 6
 % from the software package filters2.m
 garr = [
@@ -97,7 +105,7 @@ garr = [
   0                  0.00549320005590   0.00549320005590
   0                 -0.00014203017443  -0.00014203017443
 ];
-offset = -5;
+offset = [-5];
     otherwise
         error('%s: No such Double Density DWT filter',upper(mfilename));
 end;
@@ -105,8 +113,11 @@ end;
 g=mat2cell(garr,size(garr,1),ones(1,size(garr,2)));
 if isempty(offset)
    g = cellfun(@(gEl) struct('h',gEl,'offset',-floor((length(gEl)+1)/2)),g,'UniformOutput',0);
-else
+elseif numel(offset)==1
    g = cellfun(@(gEl) struct('h',gEl,'offset',offset),g,'UniformOutput',0);
+elseif isvector(offset)
+   g = cellfun(@(gEl,ofEl) struct('h',gEl,'offset',ofEl),g,num2cell(offset),...
+               'UniformOutput',0); 
 end
 h = g;
 a= [2;2;2];

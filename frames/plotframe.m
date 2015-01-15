@@ -1,9 +1,14 @@
-function outsig=plotframe(F,insig,varargin);
+function outsig=plotframe(F,insig,varargin)
 %PLOTFRAME  Plot frame coefficients
 %   Usage: plotframe(F,insig,...);
+%          C = plotframe(...);
 %
 %   `plotframe(F,c)` plots the frame coefficients *c* using the plot
 %   command associated to the frame *F*.
+%
+%   `C=plotframe(...)` for frames with time-frequency plots returns the
+%   processed image data used in the plotting. The function produces an
+%   error for frames which does not have a time-frequency plot.
 %
 %   `plotframe(F,c,...)` passes any additional parameters to the native
 %   plot routine. Please see the help on the specific plot routine for a
@@ -42,6 +47,15 @@ complainif_notenoughargs(nargin,2,'PLOTFRAME');
 complainif_notvalidframeobj(F,'PLOTFRAME');
 
 switch(F.type)
+   case {'dft','dftreal','dcti','dctii','dctiii','dctiv',...
+         'dsti','dstii','dstiii','dstiv'}
+      if nargout>0
+          error(['%s: Plot function of %s frame does not produce a ',...
+                 'TF image'],upper(mfilename),F.type);
+      end
+end;
+
+switch(F.type)
    case {'fwt','ufwt','wfbt','wpfbt','uwfbt','uwpfbt'}
       info.fname = F.type;
       info.wt = F.g;
@@ -49,18 +63,20 @@ end;
 
 switch(F.type)
  case 'dgt'
-  plotdgt(framecoef2native(F,insig),F.a,varargin{:}); 
+  outsig = plotdgt(framecoef2native(F,insig),F.a,varargin{:}); 
  case 'dgtreal'
   outsig = plotdgtreal(framecoef2native(F,insig),F.a,F.M,varargin{:}); 
  case 'dwilt'
-  plotdwilt(framecoef2native(F,insig),varargin{:}); 
+  outsig = plotdwilt(framecoef2native(F,insig),varargin{:}); 
  case 'wmdct'
-  plotwmdct(framecoef2native(F,insig),varargin{:});
+  outsig = plotwmdct(framecoef2native(F,insig),varargin{:});
  case 'gen'
   error(['%s: There is no default way of visualizing general frame ' ...
          'coefficients.'],upper(mfilename));
  case 'dft'
   plotfft(insig,varargin{:});
+ case 'dftreal'
+  plotfftreal(insig, varargin{:});
  case {'dcti','dctii','dctiii','dctiv',...
        'dsti','dstii','dstiii','dstiv'}
   % FIXME : This is not strictly correct, as half the transforms use an
@@ -73,14 +89,17 @@ switch(F.type)
     plotwavelets(insig,info,varargin{:});  
  case 'ufwt'
     info.J = F.J;
-    plotwavelets(framecoef2native(F,insig),info,varargin{:}); 
+    outsig = plotwavelets(framecoef2native(F,insig),info,varargin{:}); 
  case {'wfbt','wpfbt'}
-    plotwavelets(framecoef2native(F,insig),info,varargin{:}); 
+    outsig = plotwavelets(framecoef2native(F,insig),info,varargin{:}); 
  case {'uwfbt','uwpfbt'}
-    plotwavelets(framecoef2native(F,insig),info,varargin{:}); 
-    
-case {'filterbank','filterbankreal','ufilterbank','ufilterbankreal'}
-    plotfilterbank(framecoef2native(F,insig),F.a,[],varargin{:});
+    outsig = plotwavelets(framecoef2native(F,insig),info,varargin{:}); 
+ case {'filterbank','filterbankreal','ufilterbank','ufilterbankreal'}
+    outsig = plotfilterbank(framecoef2native(F,insig),F.a,[],varargin{:});
 end;
+
+if nargout<1
+    clear outsig;
+end
 
   

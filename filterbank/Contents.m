@@ -15,7 +15,6 @@
 %    ICQT                   - Inverse constant Q transform
 %    ERBLETT                - Erb-let transform
 %    IERBLETT               - Inverse Erb-let transform
-%    INSDGFB                - Say what?
 %
 %  Filter generators
 %    CQTFILTERS             - Logaritmically spaced filters
@@ -38,6 +37,11 @@
 %
 %  Plots
 %    PLOTFILTERBANK         - Plot normal/uniform filter bank coefficients
+%
+%  Reassignment and phase gradient
+%    FILTERBANKPHASEGRAD    - Instantaneous time/frequency from signal
+%    FILTERBANKREASSIGN     - Reassign filterbank spectrogram
+%    
 %
 %  For help, bug reports, suggestions etc. please send email to
 %  ltfat-help@lists.sourceforge.net

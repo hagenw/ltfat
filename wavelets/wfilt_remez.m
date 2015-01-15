@@ -4,13 +4,15 @@ function [h,g,a,info]=wfilt_remez(L,K,B)
 %
 %   Input parameters:
 %         L     : Length of the filters.
-%         K     : Degree of flatness at $z=-1$. 
+%         K     : Degree of flatness (regularity) at $z=-1$. 
 %         B     : Normalized transition bandwidth.
 %
-%   `[h,g,a]=wfilt_remez(L,K,B)` calculates a set of wavelet filters. You
-%   can control regularity, frequency selectivity, and length of the
-%   filters.  It works performing a factorization based on the complex
-%   cepstrum of the polynomial.
+%   `[h,g,a]=wfilt_remez(L,K,B)` calculates a set of wavelet filters. 
+%   Regularity, frequency selectivity, and length of the filters can be
+%   controlled by *K*, *B* and *L* parameters respectivelly.
+%
+%   The filter desigh algorithm is based on a Remez algorithm and a 
+%   factorization of the complex cepstrum of the polynomial.
 %
 %   Examples:
 %   ---------
@@ -29,16 +31,33 @@ if(nargin<3)
      error('%s: Too few input parameters.',upper(mfilename)); 
 end
 
+complainif_notposint(L,'L',mfilename);
+complainif_notposint(L,'K',mfilename);
+
+if B>0.2
+    error(['%s: Bandwidth of the transition band should not be',...
+           ' bigger than 0.2.'],upper(mfilename));
+end
 
 poly=remezwav(L,K,B);
 rh=fc_cceps(poly);
 
 g{1} = flipud(rh(:));
 g{2} = -(-1).^(1:length(rh)).'.*flipud(g{1});
- 
 
-g = cellfun(@(gEl) struct('h',gEl,'offset',-numel(gEl)/2),g,'UniformOutput',0);
+% Default offset
+d = [0,0];
+  % Do a filter alignment according to "center of gravity"
+  d(1) = -floor(sum((1:L)'.*abs(g{1}).^2)/sum(abs(g{1}).^2));
+  d(2) = -floor(sum((1:L)'.*abs(g{2}).^2)/sum(abs(g{2}).^2));
+  if rem(d(1)-d(2),2)==1
+      % Shift d(2) just a bit
+      d(2) = d(2) + 1;
+  end
 
+
+g = cellfun(@(gEl,dEl) struct('h',gEl,'offset',dEl),g,num2cell(d),...
+            'UniformOutput',0);
 h = g;
 
 a= [2;2];

@@ -18,18 +18,18 @@
 %    IFFTREAL       -  Inverse of |fftreal|.
 %    GGA            -  Generalized Goertzel Algorithm.
 %    CHIRPZT        -  Chirped Z-transform.
+%    FFTGRAM	    -  Plot energy of FFT.
 %    PLOTFFT        -  Plot FFT coefficients.
 %    PLOTFFTREAL    -  Plot |fftreal| coefficients.
-%	 ENSPECDEN		-  Plot energy spectral density
 %
 %  Simple operations on periodic functions
 %    INVOLUTE       -  Involution.
 %    PEVEN          -  Even part of periodic function.
 %    PODD           -  Odd part of periodic function.
 %    PCONV          -  Periodic convolution.
-%    CONVOLVE       -  Fast, non-periodic convolution.
-%    PXCORR         -  Periodic cross correlation.
-%    PAUCORR        -  Periodic autocorrelation.
+%    PXCORR         -  Periodic crosscorrelation.
+%    LCONV          -  Linear convolution.
+%    LXCORR	    -  Linear crosscorrelation. 
 %    ISEVENFUNCTION -  Test if function is even.
 %    MIDDLEPAD      -  Cut or extend even function.
 %
@@ -56,7 +56,7 @@
 %    WARPEDBLFILTER -  Warped, band-limited filter.
 %    PFILT          -  Apply filter with periodic boundary conditions.
 %    MAGRESP        -  Magnitude response plot.
-%    TRANSFERFUNCTION - Computer the transfer function of a filter.
+%    TRANSFERFUNCTION - Compute the transfer function of a filter.
 %    PGRPDELAY      -  Periodic Group Delay
 %
 %  Hermite functions and fractional Fourier transforms
@@ -69,6 +69,7 @@
 %    FFTRESAMPLE    -  Fourier interpolation.
 %    DCTRESAMPLE    -  Cosine interpolation.
 %    PDERIV         -  Derivative of periodic function.
+%    FFTANALYTIC    -  Analytic representation of a function.
 %
 %  Cosine and Sine transforms.
 %    DCTI           -  Discrete cosine transform type I

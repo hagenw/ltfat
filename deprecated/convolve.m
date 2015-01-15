@@ -2,16 +2,16 @@ function h=convolve(f,g,varargin)
 %CONVOLVE  Convolution
 %   Usage:  h=convolve(f,g);
 %
-%   `convolve(f,g)` will convolve two vectors *f* and *g*. The
-%   convolution is not periodic, so the output will have a length of ::
+%   `convolve` has been deprecated. Please use |lconv| instead.
 %
-%     output_len = length(f)+length(g)-1;
+%   A call to `convolve(f,g)` can be replaced by ::
 %
-%   This function works entirely similar to the Matlab routine `conv`
-%   using instead a fast FFT algorithm, making it much faster if one or
-%   more of the signals are long.
+%     lconv(f,g);
 %
-%   See also: pconv
+%   See also: lconv
+
+warning(['LTFAT: CONVOLVE has been deprecated, please use LCONV ' ...
+         'instead. See the help on LCONV for more details.']); 
   
 if nargin<2
   error('%s: Too few input parameters.',upper(mfilename));

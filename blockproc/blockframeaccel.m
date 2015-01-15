@@ -54,15 +54,15 @@ elseif flags.do_segola
     
    switch(F.type) 
       case {'fwt'}
-         Fo = F; 
+         Fo = frameaccel(F,Lb); 
          Fo.a = F.g.a(:);
       case {'dgt','dgtreal'}
          Fo = frameaccel(F,Lb+winLen-1+F.a);
-      case {'filterbank','filterbankreal','ufilterbank','ufilterbankreal'}
-         lcma =  filterbanklength(1,F.a(:,1));
-         Fo = frameaccel(F,Lb+winLen-1+lcma);
-         assert(all(Fo.a(:,2)==1), '%s: Fractional subsampling is not supported',upper(mfilename) );
-         Fo.lcma =  lcma;
+%       case {'filterbank','filterbankreal','ufilterbank','ufilterbankreal'}
+%          lcma =  filterbanklength(1,F.a(:,1));
+%          Fo = frameaccel(F,Lb+winLen-1+lcma);
+%          assert(all(Fo.a(:,2)==1), '%s: Fractional subsampling is not supported',upper(mfilename) );
+%          Fo.lcma =  lcma;
       case {'dwilt'}
          Fo = frameaccel(F,Lb+winLen-1+2*F.M);
          Fo.a = 2*Fo.M;
@@ -76,7 +76,7 @@ elseif flags.do_segola
    % This is important otherwise we would get 0 coefficients for some
    % blocks.
    assert(max(Fo.a(:,1)) <= Lb ,sprintf(['%s: Time step %i is bigger than the',...
-      ' block length %i.'],upper(mfilename),Fo.a,Lb));
+      ' block length %i.'],upper(mfilename),max(Fo.a(:,1)),Lb));
    
    Fo.winLen = winLen;
 
@@ -101,9 +101,9 @@ switch(F.type)
       case {'dwilt','wmdct'}
         [~, info] = wilwin(F.g,F.M,[],upper(mfilename));
       case {'filterbank','ufilterbank'}
-        [~, info]  = filterbankwin(F.g,F.a);
+        [~, ~,info]  = filterbankwin(F.g,F.a);
       case {'filterbankreal','ufilterbankreal'}
-        [~, info]  = filterbankwin(F.g,F.a,'real');
+        [~, ~,info]  = filterbankwin(F.g,F.a,'real');
       case 'fwt' 
         winLen = (F.g.a(1)^F.J-1)/(F.g.a(1)-1)*(numel(F.g.g{1}.h)-1)+1; 
 end;
