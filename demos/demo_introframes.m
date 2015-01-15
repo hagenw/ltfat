@@ -1,10 +1,15 @@
-function demo_introframes % RUNASSCRIPT
+function demo_introframes %TUTOR
 %DEMO_INTROFRAMES Introduction to frames in finite dimension
 %
 %   This demonstration explains some basic concepts of frame theory using
 %   linear algebra examples in $\mathbb{R}^L$ ($L=3$,$L=2$). 
-%   The frames are created as columns of a matrix F
-%   Where applicable, the same task is solved using the frames framework.
+%
+%   A frame in a Hilbert space $\mathcal{H}$ is a collection of vectors 
+%   $f_n$ for which the following holds for all $x\in\mathcal{H}$:
+%
+%   .. math:: A||x|| \leq \sum_n \langle f_n,x \rangle \leq B||x||
+%
+%   with frame bounds $A,B$ being $0<A\leq B < \inftty$.
 %
 %   We search for a solution of:
 %
