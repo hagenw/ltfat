@@ -27,69 +27,113 @@ function tutor_introframes %TUTOR
 %   invertible on $\mathcal{H}$ and it is formed as $S=FF^*$. The Grammian
 %   $G:\mathcal{G}\rightarrow\mathcal{G}$ is given as $G=F^*F$.
 %
-%   A general bounded operator is a a 
-%
 %   In case $\mathcal{H}=\mathbb{C}^L$, frame vectors can be organized as
 %   columns of a matrix which then forms the frame synthesis operator 
 %   $F$ and the analysis operator is its adjoint $F^*$. 
 %
+%
+%   Fundamental operator spaces
+%   ---------------------------
+%
+%   rank, full row rank..
+%   
+%
 %   References: ch08 koche08 caku13
 %
 
-
 %% 
-%   Example 1
-%   ---------
-%   In the following code, we create a test signal
-%   MAT2DOC: AUDIO 'Play gspi.wav' gspi 44100 
+%   Setup
+%   -----
+%   MAT2DOC: AUDIO 'This is gspi' gspi 44100
+%   MAT2DOC: AUDIO 'This is gspi' 0.5*gspi 44100
+%   MAT2DOC: AUDIO 'This is gspi' 0.7*gspi 44100
+%
 f = [0.1,0.2,0.3]';
 
+%% 
+%   Case 1: Orthonormal basis
+%   -------------------------
+%
+%   In the following code snippet, columns of the matrix we create a orthonormal
+%   basis in $\mathbb{R}^3$.
+%   
+
+% Identity matrix
+F1 = eye(3)
+
+%%  
+%   Next, we plot the frame vectors as  
+
+% Plot it
+plotCurrent(F1,f,f)
+
 %%
-%   Orthonormal basis is $\mathbb{R}^3$
+%   We apply the analysis operator of the frame just created and plot.  
+%
 
-F1 = eye(3) %F1(end) = 0.98;
-
-A = min(svd(F1))^2;
-B = max(svd(F1))^2; 
-fprintf('A=%d, B=%d\n',A,B)
-
+% Analysis operator is conjugate transpose F1'
+c1 = F1'*f
 
 %%
-%   Something
-%   MAT2DOC: AUDIO 'This is gspi' gspi 44100
+%   Frame operator
+S = F1*F1'
 
-% Analysis operator F1'
-c1 = F1'*f;
+%%
+%   Gram operator
+G = F1'*F1
 
-% Condition number is a
-cond_num = norm(B/A) 
+%%
+%   Frame bounds and related 
+
+% Lower frame bound
+A = min(svd(F1))^2; % This is equivalent: A = min(eigs(S))
+
+% Upper frame bound
+B = max(svd(F1))^2; % This is equivalent: B = max(eigs(S))
+
+fprintf('Lower frame bound A=%d, upper framebound B=%d\n',A,B)
+
+% Condition number 
+cond_num = norm(B/A); 
 
 % Norm of a matrix
-matrix_norm = sqrt(B) 
+matrix_norm = sqrt(B);
 
 % Redundancy of a frame
 [M,N] = size(F1);
+framered = N/M;
 
+fprintf('Cond. num=%d\nmatrix norm = %d\nframe redundancy=%d\n',...
+         cond_num, matrix_norm, framered)
+     
+%%
+%   Fundamental spaces of operators derived from the singular value
+%   decomposition.
+%
+
+
+     
+     
+%%
+%   Additional frame parameters
 
 % Is it tight?
-is_tight = A == B
+is_tight = A == B;
 
-% Is it Parseval tight
-is_parsevaltight = (A == 1 && B == 1)
+% Is it Parseval tight?
+is_parsevaltight = (A == 1 && B == 1);
 
 % Is it equal norm?
-is_equalnorm = all(sum(F1.^2).^(1/2) == norm(F1(:,1)))
+is_equalnorm = all(sum(F1.^2).^(1/2) == norm(F1(:,1)));
 
 % Is it equiangular?
 % (All off-diagonal entries in the Gram matrix should be equal)
-G = F1'*F1;
-is_equiangular = all( G(~eye(size(G))) == G(1,2) )
+is_equiangular = all( G(~eye(size(G))) == G(1,2) );
 
-plotCurrent(F1,f,f)
-
-  
-
-
+fprintf(['Frame is tight? %s\nFrame is Parseval tight %s?\nFrame is ',...
+         'equal-norm? %s\nFrame is equiangular? %s'],...
+         ltos(is_tight),ltos(is_parsevaltight),ltos(is_equalnorm),...
+         ltos(is_equiangular));
 
 % [U,s,V]=svd([1,0;0,1;1,1]);
 
@@ -97,23 +141,58 @@ plotCurrent(F1,f,f)
 % of the resulting frame (Naimark theorem) 
 
 %%
-%   Another orthonormal basis in R^3
+%   Case 2: Another orthonormal basis
+%   ---------------------------------
+%
 %   This is unitary isomorphic to F1 as it is obtained
 %   as F2=R*F1, where R is unitary rotation matrix.
-%   Gram matrices of frames F1 and F2 are equal
 %   (rotated by 20 degrees)
-F2 = rot(F1,20);
-plotfinframe(F2);
-plotCurrent(F2,f,f)
-
+F2 = rot(F1,20)
 
 %%
-%   Tight frames
-%   ------------
+%   Visualize the same vector
 %
-%   Frame is tight if $A=B$.
+
+% Plot it
+plotCurrent(F2,f,f);
+
+%%
+%   Gram matrix and all other frame properties are equal to case 1.
+S2 = F2*F2'
+
+%%
+%   Case 3: Redundant tight frame
+%   -----------------------------
+%
+%   In the following, we add 4th column to the frame from case 1. It cannot
+%   be a basis as 
+
+F3 = [0 sin(pi/3)  -sin(pi/3) 0
+      0 sin(pi/6)  sin(pi/6)  -sin(pi/6)
+      1 -sin(pi/6) -sin(pi/6) -sin(pi/6) ];
+F3 = normalize(F3)
+  
+norm(F3(:,4))
+
+% Plot it
+plotCurrent(F3,f,f);
+% Lower frame bound
+A = min(svd(F3))^2; % This is equivalent: A = min(eigs(S))
+
+% Upper frame bound
+B = max(svd(F3))^2; % This is equivalent: B = max(eigs(S))
+
+fprintf('Lower frame bound A=%d, upper framebound B=%d\n',A,B)
+
+%%
+%   Case X: Frame for a subspace
 
 
+%% 
+%   Case X: Checking Naimark theorem 
+
+%%
+%   Case X: Making any frame tight
 
 
 function plotfinframe(A,B)
@@ -126,7 +205,7 @@ function plotfinframe(A,B)
 [~,n] = size(A);
 % puvodni frejm
 zer = zeros(n,1);
-quiver3(zer,zer,zer,A(1,:)',A(2,:)',A(3,:)','b');
+quiver3(zer,zer,zer,A(1,:)',A(2,:)',A(3,:)',0,'b');
 hold on;
 for cnt = 1:n
     text(A(1,cnt), A(2,cnt), A(3,cnt),['e_' num2str(cnt)]);
@@ -139,7 +218,7 @@ axis equal;
 
 % druhy frejm
 if nargin>1
-    quiver3(zer,zer,zer,B(1,:)',B(2,:)',B(3,:)','r');
+    quiver3(zer,zer,zer,B(1,:)',B(2,:)',B(3,:)',0,'r');
     for cnt = 1:n
         text(B(1,cnt), B(2,cnt), B(3,cnt),['f_' num2str(cnt)]);
     end
@@ -149,6 +228,9 @@ hold off;
 
 
 function plotCurrent(A,x,xhat)
+if nargin<3
+   xhat = x
+end
 %% Vykresleni v grafu
 [m,n] = size(A);
 if m ~= 3
@@ -159,14 +241,13 @@ end
 
 clf;
 % dva frejmy
-plotfinframe(A);
-hold on;
+plotfinframe(A,bsxfun(@times,A,(A'*x)'));
 zer = zeros(3,1);
 
 % vykresleni puvodniho a rekonstruovaneho vektoru
 bJsouTotozne = norm(x-xhat) < 1e-3;
 
-
+hold on
 h = plot3(x(1),x(2),x(3),'Xk'); % vykreslení pùvodního vektoru
 set(h,'LineWidth',2);
 set(h,'MarkerSize',12);
@@ -252,6 +333,18 @@ R = [u^2+(1-u^2)*cos(t), u*v*(1-cos(t))-w*sin(t), u*w*(1-cos(t))+v*sin(t);...
  
 F = R*F;
 
+function projontosub(Fsub,F)
+
+
+function s = ltos(l)
+if l
+    s = 'true';
+else
+    s = 'false';
+end
+
+
+
 % Null space of F*: Fc=0
 % 
 % For full-space frames  
@@ -264,14 +357,8 @@ F = R*F;
 
 % Frames for subspaces of R^2
 
-% Tightness
-
-% Equal norm
-
 % Maximally robust (every n x n submatrix of F* is invertible)
 % (Full spark)
-
-% Equiangularity
 
 % Equivalence of frames (isomorphism of frames): Frames F,G are equivalent 
 % (or uniratily isomorphic) if UF=G, where U is arbitrary square matrix. 
@@ -281,7 +368,7 @@ F = R*F;
 % Unitary isomorphic frames: The same but U is unitary. 
 % ||Fc|| == ||Gc||
 % F*F==G*G
-
+%   Gram matrices of frames F1 and F2 are equal
 
 % Symmetry https://www.math.auckland.ac.nz/~waldron/Preprints/Frame-symmetries/CA-02-060-RD.pdf
 
