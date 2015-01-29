@@ -59,9 +59,11 @@ end
 for hh=0:L-1
   for ii=0:L-1
     for jj = 0:L-1
-      A(hh+1, ii+1) = A(hh+1, ii+1) + R(jj+1, ii+1) .* exp(2*pi*i*hh*jj/L);
+      A(hh+1, ii+1) = A(hh+1, ii+1) + R(jj+1, ii+1) .* exp(-2*pi*i*hh*jj/L);
     end
   end
 end
 
-A = A./L;
+A = A;
+
+A = fftshift(fft2(A));

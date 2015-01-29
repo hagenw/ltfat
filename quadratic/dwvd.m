@@ -7,7 +7,7 @@ function W = dwvd(f,g);
 %         f,g      : Input vector(s)
 %
 %   Output parameters:
-%         d      : discrete Wigner-Ville distribution
+%         w      : discrete Wigner-Ville distribution
 %
 % `dwvd(f)` computes the discrete Wigner-Ville distribution of f. The discrete
 % Wigner-Ville distribution is computed by
@@ -59,6 +59,5 @@ elseif (nargin == 2)
 end
 
 R = comp_instcm(z1, z2, Lf);
-
 
 W = fft(R);

@@ -1,26 +1,18 @@
-function A = daf(f, g);
+function A = daf(f,g);
 %DAF discrete ambiguity function
 %   Usage A = daf(f);
-%         A = daf(f, g);
+%         A = daf(f,g);
 %
 %   Input parameters:
-%         f, g      : Input vector(s).
+%         f,g      : Input vector(s).
 %
 %   Output parameters:
 %         A      : discrete ambiguity function
 %
-% `daf(f)` computes the discrete  ambiguity function of f. The discrete
-% ambiguity function is computed by
+% `daf(f)` computes the discrete (symmetric) ambiguity function of f. The discrete
+% ambiguity function as the two-dimensional Fourier transform of the discrete 
+% Wigner distribution.
 %
-% .. math:: A\left( v+1,m+1 \right)\; =\; L^{-1}\sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{i2\pi nv/L}}
-%
-% where $R(n,m)$ is given by
-%
-% .. math:: R\left( m,n \right)\; =\; z\left( n+m \right)\overline{z\left( n-m \right)}
-%
-% with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as the analytical representation of $f$ when f is real-valued.
-%
-% `daf(f,g)` computes the discrete cross-ambiguity function of f and g.
 
 % AUTHOR: Jordy van Velthoven
 % TESTING: TEST_DAF
@@ -59,5 +51,4 @@ end
 
 R = comp_instcm(z1, z2, Lf);
 
-
-A = ifft(R);
+A = fftshift(fft2(fft(R)));

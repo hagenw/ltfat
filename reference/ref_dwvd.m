@@ -33,7 +33,6 @@ elseif (nargin == 2)
    z1(2:L-H) = 2*z1(2:L-H);
    z1(H+2:L) = 0;
    z1 = ifft(z1);
-
    z2 = fft(g);
    z2(2:L-H) = 2*z2(2:L-H);
    z2(H+2:L) = 0;
