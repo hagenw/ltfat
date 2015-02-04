@@ -9,18 +9,23 @@ function W = dwvd(f,g);
 %   Output parameters:
 %         w      : discrete Wigner-Ville distribution
 %
-% `dwvd(f)` computes the discrete Wigner-Ville distribution of f. The discrete
-% Wigner-Ville distribution is computed by
+%   `dwvd(f)` computes the discrete Wigner-Ville distribution of f. The discrete
+%   Wigner-Ville distribution is computed by
 %
 % .. math:: W\left( n+1,k+1 \right)\; =\; \sum_{m=0}^{L-1}{R\left( n+1,m+1 \right)e^{-i2\pi mk/L}}
 %
-% where $R(n,m)$ is given by
+%   where $R(n,m)$ is given by
 %
 % .. math:: R\left( m,n \right)\; =\; z\left( n+m \right)\overline{z\left( n-m \right)}
 %
-% with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as analytical representation of $f$ when f is real-valued.
+%   with $m \in {-L/2,\ldots, L/2 - 1} and $z$ as analytical representation of 
+%   $f$, when f is real-valued.
 %
-% `dwvd(f,g)` computes the discrete cross-Wigner-Ville distribution of f and g.
+%   `dwvd(f,g)` computes the discrete cross-Wigner-Ville distribution of f and g.
+%
+%   **WARNING**: The quadratic time-frequency distributions are highly 
+%   redundant. For an input vector of length L, the quadratic time-frequency
+%   distribution will be a $L \times L$ matrix.
 
 % AUTHOR: Jordy van Velthoven
 % TESTING: TEST_DWVD

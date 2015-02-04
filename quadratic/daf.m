@@ -9,10 +9,13 @@ function A = daf(f,g);
 %   Output parameters:
 %         A      : discrete ambiguity function
 %
-% `daf(f)` computes the discrete (symmetric) ambiguity function of f. The discrete
-% ambiguity function as the two-dimensional Fourier transform of the discrete 
-% Wigner distribution.
+%   `daf(f)` computes the discrete (symmetric) ambiguity function of f. 
+%   The discrete ambiguity function is computed as the two-dimensional
+%   Fourier transform of the discrete Wigner distribution |dwvd|.
 %
+%   **WARNING**: The quadratic time-frequency distributions are highly 
+%   redundant. For an input vector of length L, the quadratic time-frequency
+%   distribution will be a $L \times L$ matrix.
 
 % AUTHOR: Jordy van Velthoven
 % TESTING: TEST_DAF
