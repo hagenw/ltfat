@@ -45,8 +45,13 @@ if (nargin == 1)
     z1 = f;
     z2 = z1;
   end
+      
+  R = comp_instcm(z1, z2, Lf);
+      
+  W = real(fft(R));
  
 elseif (nargin == 2)
+      
   [f,~,Lf,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
   [g,~,Lg,W,~,permutedsize,order]=assert_sigreshape_pre(g,[],[],upper(mfilename));
 
@@ -61,8 +66,8 @@ elseif (nargin == 2)
     z1 = f;
     z2 = g;
   end;
+    
+  R = comp_instcm(z1, z2, Lf);
+    
+  W = fft(R);
 end
-
-R = comp_instcm(z1, z2, Lf);
-
-W = fft(R);

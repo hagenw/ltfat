@@ -4,7 +4,7 @@ function p = dqtfd(f, q);
 %
 %   Input parameters:
 %         f      : Input vector
-%	  q	 : Kernel
+%         q	     : Kernel
 %
 %   Output parameters:
 %         p      : discrete quadratic time-frequency distribution
