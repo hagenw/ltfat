@@ -1,6 +1,6 @@
-function R = comp_instcm(f, g, Ls);
-%COMP_INSTCM Compute instantaneous correlation matrix
-%   Usage R = comp_instcm(f, g, Ls);
+function R = comp_instcorrmat(f, g, Ls);
+%COMP_INSTCORRMAT Compute instantaneous correlation matrix
+%   Usage R = comp_instcorrmat(f, g, Ls);
 %
 %   Input parameters:
 %         f,g    : Input vectors

@@ -1,9 +1,9 @@
-function test_failed = test_dwvd
+function test_failed = test_ambiguityfunction
 Lr = [1, 19, 20];
 
 test_failed = 0;
 
-disp(' ===============  TEST_DWVD ==============');
+disp(' ===============  TEST_AMBIGUITYFUNCTION ==============');
 
 for ii = 1: length(Lr)
   L = Lr(ii);
@@ -31,14 +31,13 @@ for ii = 1: length(Lr)
     g = tester_crand(L,1);
     end
   
-    r1 = ref_dwvd(f,g);
-    r2 = dwvd(f,g);
+    r1 = ref_ambiguityfunction(f,g);
+    r2 = ambiguityfunction(f,g);
   
     res = norm(r1-r2);
   
     [test_failed, fail] = ltfatdiditfail(res, test_failed);
-    s = sprintf('DWVD %3s %3s L:%3i %0.5g %s', type1, type2, L, res, fail);
+    s = sprintf('DAF %3s %3s L:%3i %0.5g %s', type1, type2, L, res, fail);
     disp(s);
     end
-end
 end

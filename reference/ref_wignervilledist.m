@@ -1,8 +1,8 @@
-function W=ref_dwvd(f,g)
-%REF_DWVD  Reference discrete wigner-Ville distribution
-%   Usage:  W=ref_dwvd(f)
+function W=ref_wignervilledist(f,g)
+%REF_WIGNERVILLEDIST Reference wigner-Ville distribution
+%   Usage:  W=ref_wignervilledist(f)
 %
-%   REF_DWVD(f,g) computes the discrete Wigner-Ville distribution of f and g.
+%   REF_WIGNERVILLEDIST(f,g) computes the Wigner-Ville distribution of f and g.
 
 % AUTHOR: Jordy van Velthoven
 
@@ -50,7 +50,7 @@ for l = 0 : L-1;
   end
 end
 
-% Compute the discrete Wigner-Ville function
+% Compute the Wigner-Ville distribution
 for hh=0:L-1
   for ii=0:L-1
     for jj = 0:L-1

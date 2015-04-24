@@ -1,10 +1,10 @@
-function A=ref_daf(f, g)
-%REF_DWVD  Reference discrete ambiguity function
-%   Usage:  A=ref_daf(f)
-%	    A=ref_daf(f,g)
+function A=ref_ambiguityfunction(f, g)
+%REF_AMBIGUITYFUNCTION  Reference ambiguity function
+%   Usage:  A=ref_ambiguityfunction(f)
+%	    A=ref_ambiguityfunction(f,g)
 %
-%   REF_DAF(f) computes the ambiguity function of f.
-%   REF_DAF(f,g) computes the cross-ambiguity function of f and g.
+%   REF_AMBIGUITYFUNCTION(f) computes the ambiguity function of f.
+%   REF_AMBIGUITYFUNCTION(f,g) computes the cross-ambiguity function of f and g.
 
 % AUTHOR: Jordy van Velthoven
 
@@ -55,7 +55,7 @@ for l = 0 : L-1;
   end
 end
 
-% 
+% Compute ambiguity function A
 for hh=0:L-1
   for ii=0:L-1
     for jj = 0:L-1
@@ -63,7 +63,5 @@ for hh=0:L-1
     end
   end
 end
-
-A = A;
 
 A = fftshift(fft2(A));

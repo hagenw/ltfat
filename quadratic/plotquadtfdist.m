@@ -1,12 +1,12 @@
-function plottfd(p, varargin);
-%PLOTTFD Plot time-frequency distribution
-% Usage: plottfd(p);
+function plotquadtfdist(p, varargin);
+%PLOTQUADTFDIST Plot quadratic time-frequency distribution
+% Usage: plotquadtfdist(p);
 % 
-%   'plottfd(p)' plots the quadratic time-frequency distribution on the
-%   time-frequency plane. The quadratic time-frequency distribution
+%   'plotquadtfdist(p)' plots the quadratic time-frequency distribution 
+%   on the time-frequency plane. The quadratic time-frequency distribution
 %   should be a square matrix.
 %
-%   PLOTTFD takes the following additional arguments:
+%   PLOTQUADTFDIST takes the following additional arguments:
 %
 %     'dynrange',r
 %              Limit the dynamical range to r by using a colormap in
@@ -30,7 +30,7 @@ function plottfd(p, varargin);
 %
 %     'linabs'  Show the absolute value of the coefficients on a linear scale.
 %
-%     'tc'     Time centering. Move the beginning of the signal to the
+%     'tc'     Time centring. Move the beginning of the signal to the
 %              middle of the plot. 
 %
 %     'clim',clim   Use a colormap ranging from clim(1) to clim(2). These
@@ -51,7 +51,7 @@ function plottfd(p, varargin);
 
 % AUTHOR: Jordy van Velthoven
 
-complainif_notenoughargs(nargin, 1, 'PLOTTFD');
+complainif_notenoughargs(nargin, 1, 'PLOTQUADTFDIST');
 
 [N1, N2] = size(p);
 

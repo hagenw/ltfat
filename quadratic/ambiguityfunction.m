@@ -1,25 +1,25 @@
-function A = daf(f,g);
-%DAF discrete ambiguity function
-%   Usage A = daf(f);
-%         A = daf(f,g);
+function A = ambiguityfunction(f,g);
+%AMBIGUITYFUNCTION Ambiguity function
+%   Usage A = ambiguityfunction(f);
+%         A = ambiguityfunction(f,g);
 %
 %   Input parameters:
-%         f,g      : Input vector(s).
+%         f,g    : Input vector(s).
 %
 %   Output parameters:
-%         A      : discrete ambiguity function
+%         A      : ambiguity function
 %
-%   `daf(f)` computes the discrete (symmetric) ambiguity function of f. 
-%   The discrete ambiguity function is computed as the two-dimensional
-%   Fourier transform of the discrete Wigner distribution |dwvd|.
+%   `ambiguityfunction(f)` computes the (symmetric) ambiguity function of f.
+%   The ambiguity function is computed as the two-dimensional Fourier transform
+%   of the Wigner-Ville distribution |wignervilledist|.
 %
 %   **WARNING**: The quadratic time-frequency distributions are highly 
 %   redundant. For an input vector of length L, the quadratic time-frequency
 %   distribution will be a $L \times L$ matrix.
 
 % AUTHOR: Jordy van Velthoven
-% TESTING: TEST_DAF
-% REFERENCE: REF_DAF
+% TESTING: TEST_AMBIGUITYFUNCTION
+% REFERENCE: REF_AMBIGUITYFUNCTION
 
 complainif_notenoughargs(nargin, 1, 'DAF');
 
@@ -52,6 +52,6 @@ elseif (nargin == 2)
   end;
 end
 
-R = comp_instcm(z1, z2, Lf);
+R = comp_instcorrmat(z1, z2, Lf);
 
 A = fftshift(fft2(fft(R)));
