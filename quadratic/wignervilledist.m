@@ -39,14 +39,14 @@ if (nargin == 1)
   [f,~,Lf,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
   
   if isreal(f)
-    z1 = comp_fftanalytic(f, Lf);
+    z1 = comp_fftanalytic(f);
     z2 = z1;
   else
     z1 = f;
     z2 = z1;
   end
       
-  R = comp_instcorrmat(z1, z2, Lf);
+  R = comp_instcorrmat(z1, z2);
       
   W = real(fft(R));
  
@@ -60,14 +60,14 @@ elseif (nargin == 2)
   end;
   
   if isreal(f) || isreal(g)
-    z1 = comp_fftanalytic(f, Lf);
-    z2 = comp_fftanalytic(g, Lg);
+    z1 = comp_fftanalytic(f);
+    z2 = comp_fftanalytic(g);
   else
     z1 = f;
     z2 = g;
   end;
     
-  R = comp_instcorrmat(z1, z2, Lf);
+  R = comp_instcorrmat(z1, z2);
     
   W = fft(R);
 end
