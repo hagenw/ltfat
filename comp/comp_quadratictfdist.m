@@ -16,7 +16,7 @@ if isreal(f)
  z = comp_fftanalytic(f);
 else
  z = f;
-endif;
+end;
 
 R = comp_instcorrmat(z,z);
 
