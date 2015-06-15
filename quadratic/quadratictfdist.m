@@ -1,21 +1,21 @@
-function p = dqtfd(f, q);
-%DQTFD discrete quadratic time-frequency distribution
-%   Usage p = dqtfd(f);
+function p = quadratictfdist(f, q);
+%QUADRATICTFDIST Quadratic time-frequency distribution
+%   Usage p = quadratictfdist(f, q);;
 %
 %   Input parameters:
 %         f      : Input vector
-%         q	     : Kernel
+%	  q	 : Kernel
 %
 %   Output parameters:
-%         p      : discrete quadratic time-frequency distribution
+%         p      : Quadratic time-frequency distribution
 % 
 % For an input vector of length L, the kernel should be a L x L matrix.
-% `dqtfd(f, q)` computes a discrete quadratic time-frequency distribution. 
+% `quadratictfdist(f, q);` computes a discrete quadratic time-frequency distribution. 
 %
 
 % AUTHOR: Jordy van Velthoven
 
-complainif_notenoughargs(nargin, 2, 'DQTFD');
+complainif_notenoughargs(nargin, 2, 'QUADRATICTFDIST');
 
 [M,N] = size(q);
 
@@ -25,4 +25,4 @@ end
 
 [f,~,Ls,W,~,permutedsize,order]=assert_sigreshape_pre(f,[],[],upper(mfilename));
 
-p = comp_dqtfd(f, q, Ls);
+p = comp_quadratictfdist(f, q);
