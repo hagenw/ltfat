@@ -20,6 +20,6 @@ end;
 
 R = comp_instcorrmat(z,z);
 
-c = fftshift(ifft2(fft2(R).*fft2(q)));
+c = ifft2(fft2(R).*fft2(q));
 
 p = fft(c);
